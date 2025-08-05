@@ -1,0 +1,52 @@
+version: "3.1"
+
+rules:
+- rule: Say goodbye anytime the user says goodbye
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- rule: Say 'I am a bot' anytime the user challenges
+  steps:
+  - intent: bot_challenge
+  - action: utter_iamabot
+
+- rule: Activate language detection
+  steps:
+  - intent: greet
+  - action: action_detect_language
+
+- rule: Handle fallback
+  steps:
+  - intent: fallback
+  - action: utter_fallback
+
+- rule: Handle thank you
+  steps:
+  - intent: thank_you
+  - action: utter_thank_you
+
+- rule: Handle attraction queries with entities
+  steps:
+  - intent: ask_location
+  - action: action_get_attraction_details
+
+- rule: Handle food queries with entities
+  steps:
+  - intent: ask_food
+  - action: action_get_food_details
+
+- rule: Handle transport queries
+  steps:
+  - intent: ask_transport
+  - action: action_get_transport_details
+
+- rule: Handle hotel queries
+  steps:
+  - intent: ask_hotel
+  - action: action_get_hotel_details
+
+- rule: Handle emergency queries
+  steps:
+  - intent: ask_emergency
+  - action: action_get_emergency_contacts

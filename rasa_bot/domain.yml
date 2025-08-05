@@ -1,0 +1,157 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - thank_you
+  - ask_attraction
+  - ask_food
+  - ask_culture
+  - ask_transport
+  - ask_airport_transfer
+  - ask_hotel
+  - ask_booking
+  - ask_emergency
+  - ask_embassy
+  - ask_weather
+  - ask_currency
+  - ask_visa
+  - ask_location
+  - ask_activities
+  - ask_safety
+  - ask_language
+  - fallback
+
+entities:
+  - location
+  - food_item
+  - transport_mode
+  - hotel_type
+  - attraction_name
+  - city
+  - language
+
+slots:
+  location:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: location
+  food_item:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: food_item
+  transport_mode:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: transport_mode
+  hotel_type:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: hotel_type
+  attraction_name:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: attraction_name
+  city:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: city
+  language:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: language
+
+responses:
+  utter_greet:
+    - text: "Hello! Welcome to Sri Lanka Tourism Assistant. How can I help you today?"
+    - text: "Ayubowan! Welcome to Sri Lanka. How may I assist you?"
+    - text: "வணக்கம்! இலங்கை சுற்றுலா உதவியாளருக்கு வரவேற்கிறோம். நான் உங்களுக்கு எப்படி உதவ முடியும்?"
+
+  utter_goodbye:
+    - text: "Goodbye! Have a wonderful time in Sri Lanka!"
+    - text: "සුභ ගමන්! ශ්‍රී ලංකාවේ සුභ ගමන්!"
+    - text: "பிரியாவிடை! இலங்கையில் நல்ல நேரம் கழியட்டும்!"
+
+  utter_thank_you:
+    - text: "You're welcome! Is there anything else you'd like to know?"
+    - text: "ඔබට ස්තූතියි! වෙනත් යමක් දැනගැනීමට අවශ්‍යද?"
+    - text: "நன்றி! வேறு ஏதாவது தெரிந்துகொள்ள விரும்புகிறீர்களா?"
+
+  utter_ask_attraction:
+    - text: "Sri Lanka has many amazing attractions! Some popular ones include Sigiriya, Nuwara Eliya, Galle Fort, and Yala National Park. Which one would you like to know more about?"
+    - text: "ශ්‍රී ලංකාවේ බොහෝ ආකර්ෂණීය ස්ථාන තිබේ! සීගිරිය, නුවරඑළිය, ගාල්ල බලකොටුව, යාල ජාතික වනෝද්‍යානය වැනි ස්ථාන ප්‍රසිද්ධයි. ඔබට කුමන එකක් ගැන වැඩි විස්තර දැනගැනීමට අවශ්‍යද?"
+    - text: "இலங்கையில் பல அதிசயமான இடங்கள் உள்ளன! சிகிரியா, நுவரெலியா, காலி கோட்டை, யால தேசிய பூங்கா போன்றவை பிரபலமானவை. எதைப் பற்றி மேலும் தெரிந்துகொள்ள விரும்புகிறீர்கள்?"
+
+  utter_ask_food:
+    - text: "Sri Lankan cuisine is delicious! Popular dishes include rice and curry, kottu roti, hoppers, and string hoppers. What would you like to know about?"
+    - text: "ශ්‍රී ලාංකික ආහාර රසවත්! බත් සහ කරවල, කොත්තු රොටි, ආප්ප, ස්ට්‍රිං ආප්ප වැනි ආහාර ප්‍රසිද්ධයි. ඔබට කුමන එකක් ගැන දැනගැනීමට අවශ්‍යද?"
+    - text: "இலங்கை உணவு சுவையானது! பிரபலமான உணவுகளில் சாதம் மற்றும் கறி, கோத்து ரொட்டி, அப்பம், இடியப்பம் போன்றவை உள்ளன. எதைப் பற்றி தெரிந்துகொள்ள விரும்புகிறீர்கள்?"
+
+  utter_ask_transport:
+    - text: "Sri Lanka has various transportation options including trains, buses, and taxis. Trains are scenic and affordable, while buses connect most cities. What type of transport are you interested in?"
+    - text: "ශ්‍රී ලංකාවේ දුම්රිය, බස්, ටැක්සි වැනි විවිධ ප්‍රවාහන විකල්ප තිබේ. දුම්රිය සුන්දර සහ ලාභදායී වන අතර බස් බොහෝ නගර සම්බන්ධ කරයි. ඔබට කුමන ආකාරයේ ප්‍රවාහනය ගැන උනන්දුවක් තිබේද?"
+    - text: "இலங்கையில் ரயில்கள், பேருந்துகள், டாக்ஸிகள் போன்ற பல்வேறு போக்குவரத்து வசதிகள் உள்ளன. ரயில்கள் அழகானவை மற்றும் மலிவானவை, பேருந்துகள் பெரும்பாலான நகரங்களை இணைக்கின்றன. எந்த வகை போக்குவரத்தில் ஆர்வமாக உள்ளீர்கள்?"
+
+  utter_ask_emergency:
+    - text: "For emergencies in Sri Lanka, call 119 for police, 110 for ambulance, and 111 for fire services. Tourist police can be reached at 011-242-1052."
+    - text: "ශ්‍රී ලංකාවේ හදිසි අවස්ථා සඳහා පොලිසිය සඳහා 119, ගිලන් රථ සඳහා 110, ගිනි නිවන සඳහා 111 ට අමතන්න. සංචාරක පොලිසිය 011-242-1052 ට ලබාගත හැකිය."
+    - text: "இலங்கையில் அவசர நிலைமைகளுக்கு காவல்துறைக்கு 119, ஆம்புலன்ஸுக்கு 110, தீயணைப்பு சேவைகளுக்கு 111 ஐ அழையுங்கள். சுற்றுலா காவல்துறையை 011-242-1052 இல் அடையலாம்."
+
+  utter_ask_weather:
+    - text: "Sri Lanka has a tropical climate with two monsoon seasons. The best time to visit is from December to March. Current weather varies by region."
+    - text: "ශ්‍රී ලංකාවේ නිවර්තන දේශගුණයක් ඇති අතර මොසෝන් ඍතු දෙකක් තිබේ. සංචාරය කිරීමට හොඳම කාලය දෙසැම්බර් සිට මාර්තු දක්වා වේ. වර්තමාන කාලගුණය කලාපය අනුව වෙනස් වේ."
+    - text: "இலங்கையில் வெப்பமண்டல காலநிலை உள்ளது, இரண்டு பருவமழை காலங்கள் உள்ளன. பார்வையிட சிறந்த நேரம் டிசம்பர் முதல் மார்ச் வரை. தற்போதைய வானிலை பிராந்தியத்தின்படி மாறுபடும்."
+
+  utter_ask_currency:
+    - text: "The currency in Sri Lanka is the Sri Lankan Rupee (LKR). 1 USD is approximately 320 LKR. You can exchange money at banks, hotels, and authorized exchange centers."
+    - text: "ශ්‍රී ලංකාවේ මුදල් ශ්‍රී ලාංකික රුපියල් (LKR) වේ. 1 USD ආසන්න වශයෙන් 320 LKR වේ. ඔබට බැංකු, හෝටල් සහ අනුමත හුවමාරු මධ්‍යස්ථානවල මුදල් හුවමාරු කළ හැකිය."
+    - text: "இலங்கையின் நாணயம் இலங்கை ரூபாய் (LKR). 1 USD தோராயமாக 320 LKR. நீங்கள் வங்கிகள், ஹோட்டல்கள் மற்றும் அங்கீகரிக்கப்பட்ட பரிமாற்ற மையங்களில் பணத்தை மாற்றலாம்."
+
+  utter_ask_visa:
+    - text: "Most tourists need an Electronic Travel Authorization (ETA) to visit Sri Lanka. You can apply online at eta.gov.lk. The cost is $35 USD for 30 days."
+    - text: "බොහෝ සංචාරකයින්ට ශ්‍රී ලංකාවට පැමිණීමට විද්‍යුත් සංචාර අනුමැතිය (ETA) අවශ්‍ය වේ. ඔබට eta.gov.lk හි online අයදුම් කළ හැකිය. 30 දින සඳහා පිරිවැය $35 USD වේ."
+    - text: "பெரும்பாலான சுற்றுலா பயணிகள் இலங்கைக்கு வர மின்னணு பயண அங்கீகாரம் (ETA) தேவை. eta.gov.lk இல் ஆன்லைனில் விண்ணப்பிக்கலாம். 30 நாட்களுக்கான செலவு $35 USD."
+
+  utter_fallback:
+    - text: "I'm sorry, I didn't understand that. Could you please rephrase your question or ask about tourist attractions, food, transportation, or emergency services?"
+    - text: "සමාවන්න, මම එය තේරුම් ගැනීමට අපොහොසත් විය. කරුණාකර ඔබේ ප්‍රශ්නය නැවත ප්‍රකාශ කරන්න හෝ සංචාරක ආකර්ෂණ, ආහාර, ප්‍රවාහන හෝ හදිසි සේවා ගැන අසන්න."
+    - text: "மன்னிக்கவும், நான் அதை புரிந்துகொள்ளவில்லை. தயவுசெய்து உங்கள் கேள்வியை மறுபடியும் கேள்வி கேள்வி அல்லது சுற்றுலா இடங்கள், உணவு, போக்குவரத்து அல்லது அவசர சேவைகளைப் பற்றி கேள்வி கேள்வி."
+
+actions:
+  - utter_greet
+  - utter_goodbye
+  - utter_thank_you
+  - utter_ask_attraction
+  - utter_ask_food
+  - utter_ask_culture
+  - utter_ask_transport
+  - utter_ask_airport_transfer
+  - utter_ask_hotel
+  - utter_ask_booking
+  - utter_ask_emergency
+  - utter_ask_embassy
+  - utter_ask_weather
+  - utter_ask_currency
+  - utter_ask_visa
+  - utter_ask_location
+  - utter_ask_activities
+  - utter_ask_safety
+  - utter_ask_language
+  - utter_fallback
+  - action_get_attraction_details
+  - action_get_food_details
+  - action_get_transport_details
+  - action_get_hotel_details
+  - action_get_emergency_contacts
+  - action_detect_language
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

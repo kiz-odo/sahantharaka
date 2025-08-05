@@ -1,0 +1,132 @@
+version: "3.1"
+
+stories:
+- story: greet and ask attraction
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_attraction
+  - action: utter_ask_attraction
+
+- story: ask specific location
+  steps:
+  - intent: ask_location
+  - action: action_get_attraction_details
+
+- story: ask food information
+  steps:
+  - intent: ask_food
+  - action: utter_ask_food
+
+- story: ask transport information
+  steps:
+  - intent: ask_transport
+  - action: utter_ask_transport
+
+- story: ask emergency information
+  steps:
+  - intent: ask_emergency
+  - action: utter_ask_emergency
+
+- story: ask weather information
+  steps:
+  - intent: ask_weather
+  - action: utter_ask_weather
+
+- story: ask currency information
+  steps:
+  - intent: ask_currency
+  - action: utter_ask_currency
+
+- story: ask visa information
+  steps:
+  - intent: ask_visa
+  - action: utter_ask_visa
+
+- story: ask hotel information
+  steps:
+  - intent: ask_hotel
+  - action: utter_ask_hotel
+
+- story: ask booking information
+  steps:
+  - intent: ask_booking
+  - action: utter_ask_booking
+
+- story: ask culture information
+  steps:
+  - intent: ask_culture
+  - action: utter_ask_culture
+
+- story: ask activities information
+  steps:
+  - intent: ask_activities
+  - action: utter_ask_activities
+
+- story: ask safety information
+  steps:
+  - intent: ask_safety
+  - action: utter_ask_safety
+
+- story: ask language information
+  steps:
+  - intent: ask_language
+  - action: utter_ask_language
+
+- story: ask airport transfer
+  steps:
+  - intent: ask_airport_transfer
+  - action: utter_ask_airport_transfer
+
+- story: ask embassy information
+  steps:
+  - intent: ask_embassy
+  - action: utter_ask_embassy
+
+- story: thank you flow
+  steps:
+  - intent: thank_you
+  - action: utter_thank_you
+
+- story: goodbye flow
+  steps:
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: fallback flow
+  steps:
+  - intent: fallback
+  - action: utter_fallback
+
+- story: complex conversation about attractions
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: ask_attraction
+  - action: utter_ask_attraction
+  - intent: ask_location
+    entities:
+    - attraction_name: "Sigiriya"
+  - action: action_get_attraction_details
+  - intent: thank_you
+  - action: utter_thank_you
+  - intent: goodbye
+  - action: utter_goodbye
+
+- story: food and transport inquiry
+  steps:
+  - intent: ask_food
+  - action: utter_ask_food
+  - intent: ask_transport
+  - action: utter_ask_transport
+  - intent: thank_you
+  - action: utter_thank_you
+
+- story: emergency and safety inquiry
+  steps:
+  - intent: ask_emergency
+  - action: utter_ask_emergency
+  - intent: ask_safety
+  - action: utter_ask_safety
+  - intent: thank_you
+  - action: utter_thank_you
