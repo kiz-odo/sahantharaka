@@ -1,0 +1,246 @@
+version: "3.1"
+
+nlu:
+- intent: greet
+  examples: |
+    - hello
+    - hi
+    - hey
+    - good morning
+    - good afternoon
+    - good evening
+    - ayubowan
+    - සුභ උදෑසනක්
+    - සුභ සන්ධ්‍යාවක්
+    - ආයුබෝවන්
+    - வணக்கம்
+    - நமஸ்காரம்
+    - வணக்கம் நண்பா
+    - ஹலோ
+
+- intent: goodbye
+  examples: |
+    - bye
+    - goodbye
+    - see you later
+    - see you
+    - take care
+    - සුභ ගමන්
+    - ආයුබෝවන්
+    - තව සම්භවයි
+    - பிரியாவிடை
+    - சென்று வருகிறேன்
+    - குட்பை
+
+- intent: thank_you
+  examples: |
+    - thank you
+    - thanks
+    - thank you so much
+    - thanks a lot
+    - ස්තූතියි
+    - බොහෝ ස්තූතියි
+    - நன்றி
+    - மிக்க நன்றி
+    - நன்றி நண்பா
+
+- intent: ask_attraction
+  examples: |
+    - what are the tourist attractions in Sri Lanka
+    - tell me about places to visit
+    - what should I see in Sri Lanka
+    - popular tourist spots
+    - best places to visit
+    - ශ්‍රී ලංකාවේ සංචාරක ආකර්ෂණ මොනවාද
+    - බලන්න යුතු ස්ථාන මොනවාද
+    - ප්‍රසිද්ධ සංචාරක ස්ථාන
+    - இலங்கையில் சுற்றுலா இடங்கள் என்ன
+    - பார்வையிட வேண்டிய இடங்கள்
+    - பிரபலமான சுற்றுலா இடங்கள்
+
+- intent: ask_location
+  examples: |
+    - where is [Sigiriya](attraction_name)
+    - how do I get to [Nuwara Eliya](attraction_name)
+    - location of [Galle Fort](attraction_name)
+    - where can I find [Yala National Park](attraction_name)
+    - [සීගිරිය](attraction_name) කොහෙද
+    - [නුවරඑළිය](attraction_name) යන්නේ කොහොමද
+    - [ගාල්ල බලකොටුව](attraction_name) කොහෙද
+    - [சிகிரியா](attraction_name) எங்கே
+    - [நுவரெலியா](attraction_name) எப்படி போவது
+    - [காலி கோட்டை](attraction_name) எங்கே
+
+- intent: ask_food
+  examples: |
+    - what is Sri Lankan food like
+    - tell me about local cuisine
+    - what should I eat in Sri Lanka
+    - popular Sri Lankan dishes
+    - traditional food
+    - ශ්‍රී ලාංකික ආහාර මොනවාද
+    - දේශීය ආහාර ගැන කියන්න
+    - ශ්‍රී ලංකාවේ කෑම මොනවාද
+    - இலங்கை உணவு எப்படி இருக்கும்
+    - உள்ளூர் உணவு பற்றி சொல்லுங்கள்
+    - பாரம்பரிய உணவு
+
+- intent: ask_culture
+  examples: |
+    - tell me about Sri Lankan culture
+    - what are the customs in Sri Lanka
+    - cultural festivals
+    - traditional customs
+    - ශ්‍රී ලාංකික සංස්කෘතිය ගැන කියන්න
+    - ශ්‍රී ලංකාවේ සිරිත් මොනවාද
+    - සංස්කෘතික උත්සව
+    - இலங்கை கலாச்சாரம் பற்றி சொல்லுங்கள்
+    - இலங்கையில் பழக்கவழக்கங்கள் என்ன
+    - கலாச்சார திருவிழாக்கள்
+
+- intent: ask_transport
+  examples: |
+    - how do I get around Sri Lanka
+    - transportation options
+    - how to travel in Sri Lanka
+    - public transport
+    - ශ්‍රී ලංකාවේ ගමන් කරන්නේ කොහොමද
+    - ප්‍රවාහන විකල්ප
+    - ශ්‍රී ලංකාවේ ගමන් කරන්නේ කොහොමද
+    - இலங்கையில் எப்படி போகலாம்
+    - போக்குவரத்து வசதிகள்
+    - பொது போக்குவரத்து
+
+- intent: ask_airport_transfer
+  examples: |
+    - how do I get from the airport to [Colombo](city)
+    - airport transportation
+    - airport transfer options
+    - how to get to city from airport
+    - ගුවන්තොටුපළෙන් [කොළඹ](city) යන්නේ කොහොමද
+    - ගුවන්තොටුපළ ප්‍රවාහන
+    - இலங்கை விமான நிலையத்திலிருந்து [கொழும்பு](city) எப்படி போவது
+    - விமான நிலைய போக்குவரத்து
+
+- intent: ask_hotel
+  examples: |
+    - where can I stay in Sri Lanka
+    - hotel recommendations
+    - accommodation options
+    - best hotels in [Colombo](city)
+    - ශ්‍රී ලංකාවේ රැඳී සිටිය හැක්කේ කොහෙද
+    - හෝටල් නිර්දේශ
+    - [கொழும்பு](city) இல் தங்கலாம் எங்கே
+    - ஹோட்டல் பரிந்துரைகள்
+
+- intent: ask_booking
+  examples: |
+    - how do I book a hotel
+    - hotel booking process
+    - can I book online
+    - booking websites
+    - හෝටල් බුක් කරන්නේ කොහොමද
+    - බුකිං වෙබ් අඩවි
+    - ஹோட்டல் புக்கிங் எப்படி
+    - ஆன்லைன் புக்கிங்
+
+- intent: ask_emergency
+  examples: |
+    - emergency contact numbers
+    - what if I need help
+    - emergency services
+    - police contact
+    - හදිසි අවස්ථා අංක
+    - උදව්වක් අවශ්‍ය නම්
+    - හදිසි සේවා
+    - அவசர தொடர்பு எண்கள்
+    - உதவி தேவைப்பட்டால்
+    - அவசர சேவைகள்
+
+- intent: ask_embassy
+  examples: |
+    - embassy information
+    - where is the [US](language) embassy
+    - embassy contact details
+    - consulate information
+    - [ඇමරිකා](language) තානාපති කාර්යාලය කොහෙද
+    - தூதரக தகவல்
+    - [அமெரிக்க](language) தூதரகம் எங்கே
+    - தூதரக தொடர்பு விவரங்கள்
+
+- intent: ask_weather
+  examples: |
+    - what's the weather like in Sri Lanka
+    - best time to visit
+    - weather forecast
+    - rainy season
+    - ශ්‍රී ලංකාවේ කාලගුණය කොහොමද
+    - යාමට හොඳම කාලය
+    - காலநிலை எப்படி
+    - மழைக்காலம்
+    - பார்வையிட சிறந்த நேரம்
+
+- intent: ask_currency
+  examples: |
+    - what currency is used in Sri Lanka
+    - exchange rate
+    - where can I exchange money
+    - ශ්‍රී ලංකාවේ මුදල් මොනවාද
+    - හුවමාරු අනුපාතය
+    - இலங்கையில் என்ன நாணயம்
+    - பரிமாற்ற விகிதம்
+    - பணம் மாற்றலாம் எங்கே
+
+- intent: ask_visa
+  examples: |
+    - do I need a visa for Sri Lanka
+    - visa requirements
+    - how to apply for visa
+    - ETA application
+    - ශ්‍රී ලංකාවට වීසා අවශ්‍යද
+    - වීසා අවශ්‍යතා
+    - இலங்கைக்கு விசா தேவையா
+    - விசா விண்ணப்பம் எப்படி
+
+- intent: ask_activities
+  examples: |
+    - what can I do in Sri Lanka
+    - activities and tours
+    - adventure activities
+    - water sports
+    - ශ්‍රී ලංකාවේ කළ හැක්කේ මොනවාද
+    - ක්‍රියාකාරකම් සහ සංචාර
+    - இலங்கையில் என்ன செய்யலாம்
+    - சாகச செயல்பாடுகள்
+    - நீர் விளையாட்டுகள்
+
+- intent: ask_safety
+  examples: |
+    - is Sri Lanka safe for tourists
+    - safety tips
+    - travel safety
+    - crime rate
+    - ශ්‍රී ලංකාව සංචාරකයින්ට ආරක්ෂිතද
+    - ආරක්ෂාව පිළිබඳ උපදෙස්
+    - இலங்கை சுற்றுலா பயணிகளுக்கு பாதுகாப்பானதா
+    - பாதுகாப்பு குறிப்புகள்
+
+- intent: ask_language
+  examples: |
+    - what languages are spoken in Sri Lanka
+    - do people speak English
+    - language barrier
+    - ශ්‍රී ලංකාවේ කතා කරන භාෂා මොනවාද
+    - ඉංග්‍රීසි කතා කරනවාද
+    - இலங்கையில் என்ன மொழிகள் பேசப்படுகின்றன
+    - ஆங்கிலம் பேசுகிறார்களா
+
+- intent: fallback
+  examples: |
+    - I don't understand
+    - what do you mean
+    - can you explain
+    - මම තේරුම් ගන්නේ නැහැ
+    - ඔබ අදහස් කරන්නේ මොනවාද
+    - நான் புரிந்துகொள்ளவில்லை
+    - என்ன அர்த்தம்
