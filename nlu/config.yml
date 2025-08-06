@@ -1,0 +1,11 @@
+language: en
+pipeline:
+  - name: LanguageModelFeaturizer
+    model_name: "xlm-roberta-base"
+  - name: DIETClassifier
+  - name: EntitySynonymMapper
+  - name: ResponseSelector
+policies:
+  - name: MemoizationPolicy
+  - name: RulePolicy
+  - name: TEDPolicy

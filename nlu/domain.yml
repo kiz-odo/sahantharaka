@@ -1,0 +1,22 @@
+version: "3.1"
+intents:
+  - greet
+  - ask_about_attraction
+  - ask_transport
+  - ask_food
+  - ask_accommodation
+  - ask_emergency
+  - goodbye
+entities:
+  - location
+  - food
+  - date
+responses:
+  utter_greet:
+    - text: "Hello! How can I help you with your Sri Lanka trip?"
+    - text: "வணக்கம்! இலங்கையில் உங்கள் பயணத்திற்கு என்ன உதவி செய்யலாம்?"
+    - text: "ආයුබෝවන්! ඔබේ ශ්‍රී ලංකා සංචාරයට මට උදව් කළ හැක්කේ කෙසේද?"
+  utter_goodbye:
+    - text: "Goodbye! Have a great journey."
+    - text: "பை! நல்ல பயணம் வாழ்த்துகள்."
+    - text: "ආයුබෝවන්! සුභ ගමනක් වේවා."

@@ -1,0 +1,17 @@
+version: "3.1"
+nlu:
+- intent: greet
+  examples: |
+    - Hi
+    - வணக்கம்
+    - හෙලෝ
+- intent: ask_about_attraction
+  examples: |
+    - Tell me about Sigiriya
+    - කොළඹ ගැන කියන්න
+    - யாழ்ப்பாணம் பற்றி சொல்லுங்கள்
+- intent: ask_transport
+  examples: |
+    - How do I get to Ella?
+    - කොළඹ සිට මහනුවරට යන්න කොහොමද?
+    - கொழும்பிலிருந்து கண்டிக்கு எப்படி போகலாம்?

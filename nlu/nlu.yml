@@ -1,0 +1,61 @@
+version: "3.1"
+nlu:
+- intent: greet
+  examples: |
+    - Hello
+    - Hi
+    - வணக்கம்
+    - හෙලෝ
+    - ආයුබෝවන්
+    - வணக்கம் நண்பா
+    - හෙලෝ යාළුවා
+- intent: ask_about_attraction
+  examples: |
+    - Tell me about Sigiriya
+    - What can I see in Kandy?
+    - කොළඹ ගැන කියන්න
+    - யாழ்ப்பாணம் பற்றி சொல்லுங்கள்
+    - What is special in Galle?
+    - ගාල්ලේ有什么 විශේෂද?
+    - கொழும்பில் என்ன பார்க்கலாம்?
+- intent: ask_transport
+  examples: |
+    - How do I get to Ella?
+    - What is the best way to travel from Colombo to Kandy?
+    - කොළඹ සිට මහනුවරට යන්න කොහොමද?
+    - கொழும்பிலிருந்து கண்டிக்கு எப்படி போகலாம்?
+    - What are the train times to Jaffna?
+    - යාපනයට දුම්රිය වේලාවන් මොනවාද?
+    - யாழ்ப்பாணத்திற்கு ரயில் நேரங்கள் என்ன?
+- intent: ask_food
+  examples: |
+    - What is a popular Sri Lankan dish?
+    - කොහොමද කට්ටු කන්න?
+    - இலங்கையில் பிரபலமான உணவு என்ன?
+    - Tell me about hoppers
+    - හොපර්ස් ගැන කියන්න
+    - ஹாப்பர்ஸ் பற்றி சொல்லுங்கள்
+- intent: ask_accommodation
+  examples: |
+    - Where can I stay in Nuwara Eliya?
+    - නුවරඑළියේ නවාතැන් මොනවාද?
+    - நுவரெலியாவில் தங்க எங்கே?
+    - Suggest hotels in Colombo
+    - කොළඹ හෝටල් යෝජනා කරන්න
+    - கொழும்பில் ஹோட்டல்கள் பரிந்துரைக்கவும்
+- intent: ask_emergency
+  examples: |
+    - What is the emergency number in Sri Lanka?
+    - இலங்கையில் அவசர எண் என்ன?
+    - ශ්‍රී ලංකාවේ හදිසි අංකය කුමක්ද?
+    - Where is the nearest hospital?
+    - ළඟම රෝහල කොහෙද?
+    - அருகிலுள்ள மருத்துவமனை எங்கே?
+- intent: goodbye
+  examples: |
+    - Goodbye
+    - See you
+    - பை
+    - ආයුබෝවන්
+    - விடைபெறுகிறேன்
+    - හමුවෙමු
