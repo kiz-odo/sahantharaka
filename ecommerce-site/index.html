@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mini E‑Commerce</title>
+    <link rel="stylesheet" href="./style.css" />
+    <script defer src="./script.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-content">
+        <h1 class="brand">Mini E‑Commerce</h1>
+        <button id="cartToggle" class="cart-toggle" aria-haspopup="dialog" aria-controls="cartDrawer" aria-expanded="false" title="Open cart">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M7 4H5a1 1 0 0 0 0 2h1.22l.87 8.69A3 3 0 0 0 10.07 17h6.86a3 3 0 0 0 2.98-2.31L21 8H8.1" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="10" cy="20" r="1.75" fill="currentColor"/>
+            <circle cx="18" cy="20" r="1.75" fill="currentColor"/>
+          </svg>
+          <span id="cartCount" class="cart-count" aria-live="polite">0</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="container main">
+      <section aria-labelledby="productsHeading">
+        <h2 id="productsHeading" class="section-title">Products</h2>
+        <div id="productsGrid" class="products-grid" role="list"></div>
+      </section>
+    </main>
+
+    <aside id="cartDrawer" class="cart-drawer" role="dialog" aria-labelledby="cartTitle" aria-modal="true" hidden>
+      <div class="cart-header">
+        <h2 id="cartTitle">Your Cart</h2>
+        <button id="cartClose" class="icon-btn" aria-label="Close cart">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+      <div id="cartItems" class="cart-items" role="list"></div>
+      <div class="cart-footer">
+        <div class="totals">
+          <span>Subtotal</span>
+          <strong id="cartTotal">$0.00</strong>
+        </div>
+        <button class="primary-btn" id="checkoutBtn" type="button">Checkout</button>
+      </div>
+    </aside>
+
+    <div id="backdrop" class="backdrop" hidden></div>
+
+    <footer class="site-footer">
+      <div class="container">
+        <small>Built with HTML, CSS, and JavaScript</small>
+      </div>
+    </footer>
+  </body>
+</html>
