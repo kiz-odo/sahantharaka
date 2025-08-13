@@ -10,9 +10,11 @@ from flask_cors import cross_origin
 import logging
 import uuid
 from datetime import datetime
+from typing import Dict
 
 from ..chatbot import TourismChatbot
 from ..chatbot.security_manager import SecurityManager, MFAMethod
+from ..chatbot.trip_planner import TripPlanner
 
 logger = logging.getLogger(__name__)
 
@@ -24,6 +26,9 @@ chatbot = TourismChatbot()
 
 # Initialize security manager
 security_manager = SecurityManager()
+
+# Initialize trip planner
+trip_planner = TripPlanner()
 
 @chatbot_bp.route('/chat', methods=['POST'])
 @cross_origin()
@@ -499,6 +504,531 @@ def health_check():
             'error': str(e),
             'timestamp': datetime.now().isoformat()
         }), 500
+
+
+# Trip Planning Routes
+@chatbot_bp.route('/trip-planning/create', methods=['POST'])
+@cross_origin()
+def create_trip_plan():
+    """
+    Create a personalized trip plan based on user preferences.
+    
+    Expected JSON payload:
+    {
+        "user_id": "Unique user identifier",
+        "trip_type": "cultural|adventure|relaxation|family|budget|luxury|photography|food|nature|historical",
+        "budget_level": "budget|moderate|luxury",
+        "duration_days": 7,
+        "group_size": 2,
+        "preferred_season": "peak|shoulder|low",
+        "interests": ["culture", "history", "food"],
+        "accommodation_type": "hostel|guesthouse|hotel|resort|villa",
+        "transport_preference": "public|mix|private",
+        "dietary_restrictions": ["vegetarian"],
+        "accessibility_requirements": [],
+        "language_preference": "en"
+    }
+    
+    Returns:
+    {
+        "status": "success",
+        "trip_id": "Generated trip ID",
+        "itinerary": "Complete trip itinerary",
+        "recommendations": "Personalized recommendations"
+    }
+    """
+    try:
+        data = request.get_json()
+        
+        if not data or 'user_id' not in data:
+            return jsonify({
+                'error': 'Missing required field: user_id',
+                'status': 'error'
+            }), 400
+        
+        user_id = data.get('user_id')
+        preferences = data.copy()
+        
+        # Create trip plan
+        result = trip_planner.create_trip_plan(user_id, preferences)
+        
+        if result.get('status') == 'success':
+            logger.info(f"Trip plan created successfully for user {user_id}")
+            return jsonify(result), 200
+        else:
+            return jsonify(result), 500
+            
+    except Exception as e:
+        logger.error(f"Error creating trip plan: {str(e)}")
+        return jsonify({
+            'error': 'Failed to create trip plan',
+            'status': 'error',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+@chatbot_bp.route('/trip-planning/user-trips/<user_id>', methods=['GET'])
+@cross_origin()
+def get_user_trips(user_id):
+    """
+    Get all trips for a specific user.
+    
+    Returns:
+    {
+        "status": "success",
+        "user_id": "User identifier",
+        "trips": [
+            {
+                "trip_id": "Trip identifier",
+                "title": "Trip title",
+                "start_date": "Start date",
+                "end_date": "End date",
+                "total_budget": 1500.0,
+                "status": "draft"
+            }
+        ],
+        "total_trips": 2
+    }
+    """
+    try:
+        trips = trip_planner.get_user_trips(user_id)
+        
+        result = {
+            'status': 'success',
+            'user_id': user_id,
+            'trips': trips,
+            'total_trips': len(trips),
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        return jsonify(result), 200
+        
+    except Exception as e:
+        logger.error(f"Error getting user trips for {user_id}: {str(e)}")
+        return jsonify({
+            'error': 'Failed to get user trips',
+            'status': 'error',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+@chatbot_bp.route('/trip-planning/trip/<trip_id>', methods=['GET'])
+@cross_origin()
+def get_trip_details(trip_id):
+    """
+    Get detailed information about a specific trip.
+    
+    Returns:
+    {
+        "status": "success",
+        "trip": "Complete trip details"
+    }
+    """
+    try:
+        trip = trip_planner.get_trip_details(trip_id)
+        
+        if trip:
+            result = {
+                'status': 'success',
+                'trip': trip,
+                'timestamp': datetime.now().isoformat()
+            }
+            return jsonify(result), 200
+        else:
+            return jsonify({
+                'error': 'Trip not found',
+                'status': 'error',
+                'timestamp': datetime.now().isoformat()
+            }), 404
+            
+    except Exception as e:
+        logger.error(f"Error getting trip details for {trip_id}: {str(e)}")
+        return jsonify({
+            'error': 'Failed to get trip details',
+            'status': 'error',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+@chatbot_bp.route('/trip-planning/trip/<trip_id>', methods=['PUT'])
+@cross_origin()
+def update_trip(trip_id):
+    """
+    Update trip details.
+    
+    Expected JSON payload:
+    {
+        "title": "Updated trip title",
+        "status": "confirmed",
+        "additional_notes": "Updated notes"
+    }
+    
+    Returns:
+    {
+        "status": "success",
+        "message": "Trip updated successfully"
+    }
+    """
+    try:
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({
+                'error': 'No update data provided',
+                'status': 'error'
+            }), 400
+        
+        # Update trip
+        success = trip_planner.update_trip(trip_id, data)
+        
+        if success:
+            result = {
+                'status': 'success',
+                'message': 'Trip updated successfully',
+                'trip_id': trip_id,
+                'timestamp': datetime.now().isoformat()
+            }
+            return jsonify(result), 200
+        else:
+            return jsonify({
+                'error': 'Trip not found or update failed',
+                'status': 'error',
+                'timestamp': datetime.now().isoformat()
+            }), 404
+            
+    except Exception as e:
+        logger.error(f"Error updating trip {trip_id}: {str(e)}")
+        return jsonify({
+            'error': 'Failed to update trip',
+            'status': 'error',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+@chatbot_bp.route('/trip-planning/trip/<trip_id>', methods=['DELETE'])
+@cross_origin()
+def delete_trip(trip_id):
+    """
+    Delete a trip.
+    
+    Returns:
+    {
+        "status": "success",
+        "message": "Trip deleted successfully"
+    }
+    """
+    try:
+        # Delete trip
+        success = trip_planner.delete_trip(trip_id)
+        
+        if success:
+            result = {
+                'status': 'success',
+                'message': 'Trip deleted successfully',
+                'trip_id': trip_id,
+                'timestamp': datetime.now().isoformat()
+            }
+            return jsonify(result), 200
+        else:
+            return jsonify({
+                'error': 'Trip not found or deletion failed',
+                'status': 'error',
+                'timestamp': datetime.now().isoformat()
+            }), 404
+            
+    except Exception as e:
+        logger.error(f"Error deleting trip {trip_id}: {str(e)}")
+        return jsonify({
+            'error': 'Failed to delete trip',
+            'status': 'error',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+@chatbot_bp.route('/trip-planning/templates', methods=['GET'])
+@cross_origin()
+def get_trip_templates():
+    """
+    Get available trip templates.
+    
+    Returns:
+    {
+        "status": "success",
+        "templates": [
+            {
+                "type": "cultural",
+                "name": "Cultural Heritage Tour",
+                "description": "Explore Sri Lanka's rich cultural heritage"
+            }
+        ]
+    }
+    """
+    try:
+        templates = trip_planner.trip_templates
+        
+        result = {
+            'status': 'success',
+            'templates': [
+                {
+                    'type': template_type,
+                    'name': template.get('name', ''),
+                    'description': template.get('description', '')
+                }
+                for template_type, template in templates.items()
+            ],
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        return jsonify(result), 200
+        
+    except Exception as e:
+        logger.error(f"Error getting trip templates: {str(e)}")
+        return jsonify({
+            'error': 'Failed to get trip templates',
+            'status': 'error',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+@chatbot_bp.route('/trip-planning/options', methods=['GET'])
+@cross_origin()
+def get_trip_planning_options():
+    """
+    Get all available options for trip planning.
+    
+    Returns:
+    {
+        "status": "success",
+        "trip_types": ["cultural", "adventure", "relaxation"],
+        "budget_levels": ["budget", "moderate", "luxury"],
+        "seasons": ["peak", "shoulder", "low"],
+        "accommodation_types": ["hostel", "guesthouse", "hotel"],
+        "transport_preferences": ["public", "mix", "private"]
+    }
+    """
+    try:
+        result = {
+            'status': 'success',
+            'trip_types': [
+                'cultural', 'adventure', 'relaxation', 'family', 'budget',
+                'luxury', 'photography', 'food', 'nature', 'historical'
+            ],
+            'budget_levels': ['budget', 'moderate', 'luxury'],
+            'seasons': ['peak', 'shoulder', 'low'],
+            'accommodation_types': ['hostel', 'guesthouse', 'hotel', 'resort', 'villa'],
+            'transport_preferences': ['public', 'mix', 'private'],
+            'common_interests': [
+                'culture', 'history', 'nature', 'adventure', 'food', 'photography',
+                'shopping', 'wellness', 'education', 'relaxation'
+            ],
+            'dietary_options': [
+                'vegetarian', 'vegan', 'gluten-free', 'dairy-free', 'halal', 'kosher'
+            ],
+            'accessibility_options': [
+                'wheelchair-accessible', 'mobility-assistance', 'visual-aids', 'hearing-aids'
+            ],
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        return jsonify(result), 200
+        
+    except Exception as e:
+        logger.error(f"Error getting trip planning options: {str(e)}")
+        return jsonify({
+            'error': 'Failed to get trip planning options',
+            'status': 'error',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+@chatbot_bp.route('/trip-planning/quick-plan', methods=['POST'])
+@cross_origin()
+def create_quick_trip_plan():
+    """
+    Create a quick trip plan with minimal preferences.
+    
+    Expected JSON payload:
+    {
+        "user_id": "Unique user identifier",
+        "trip_type": "cultural",
+        "duration_days": 5,
+        "budget_level": "moderate"
+    }
+    
+    Returns:
+    {
+        "status": "success",
+        "trip_id": "Generated trip ID",
+        "itinerary": "Quick trip itinerary"
+    }
+    """
+    try:
+        data = request.get_json()
+        
+        if not data or 'user_id' not in data:
+            return jsonify({
+                'error': 'Missing required field: user_id',
+                'status': 'error'
+            }), 400
+        
+        # Set default values for quick plan
+        quick_preferences = {
+            'user_id': data['user_id'],
+            'trip_type': data.get('trip_type', 'cultural'),
+            'budget_level': data.get('budget_level', 'moderate'),
+            'duration_days': data.get('duration_days', 5),
+            'group_size': 2,
+            'preferred_season': 'peak',
+            'interests': ['culture', 'history'],
+            'accommodation_type': 'hotel',
+            'transport_preference': 'mix',
+            'dietary_restrictions': [],
+            'accessibility_requirements': [],
+            'language_preference': 'en'
+        }
+        
+        # Create quick trip plan
+        result = trip_planner.create_trip_plan(data['user_id'], quick_preferences)
+        
+        if result.get('status') == 'success':
+            logger.info(f"Quick trip plan created for user {data['user_id']}")
+            return jsonify(result), 200
+        else:
+            return jsonify(result), 500
+            
+    except Exception as e:
+        logger.error(f"Error creating quick trip plan: {str(e)}")
+        return jsonify({
+            'error': 'Failed to create quick trip plan',
+            'status': 'error',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+@chatbot_bp.route('/trip-planning/export/<trip_id>', methods=['GET'])
+@cross_origin()
+def export_trip_plan(trip_id):
+    """
+    Export trip plan in various formats.
+    
+    Query parameters:
+    - format: pdf|json|html (default: json)
+    
+    Returns:
+    Trip plan in the requested format
+    """
+    try:
+        format_type = request.args.get('format', 'json')
+        
+        # Get trip details
+        trip = trip_planner.get_trip_details(trip_id)
+        
+        if not trip:
+            return jsonify({
+                'error': 'Trip not found',
+                'status': 'error',
+                'timestamp': datetime.now().isoformat()
+            }), 404
+        
+        if format_type == 'json':
+            return jsonify({
+                'status': 'success',
+                'trip': trip,
+                'export_format': 'json',
+                'timestamp': datetime.now().isoformat()
+            }), 200
+        elif format_type == 'html':
+            # Generate HTML export
+            html_content = _generate_trip_html(trip)
+            return html_content, 200, {'Content-Type': 'text/html'}
+        elif format_type == 'pdf':
+            # For PDF export, you would need additional libraries
+            return jsonify({
+                'error': 'PDF export not yet implemented',
+                'status': 'error',
+                'timestamp': datetime.now().isoformat()
+            }), 501
+        else:
+            return jsonify({
+                'error': 'Unsupported export format',
+                'status': 'error',
+                'timestamp': datetime.now().isoformat()
+            }), 400
+            
+    except Exception as e:
+        logger.error(f"Error exporting trip plan {trip_id}: {str(e)}")
+        return jsonify({
+            'error': 'Failed to export trip plan',
+            'status': 'error',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+def _generate_trip_html(trip: Dict) -> str:
+    """Generate HTML export for trip plan."""
+    try:
+        html = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>{trip.get('title', 'Trip Plan')}</title>
+            <style>
+                body {{ font-family: Arial, sans-serif; margin: 20px; }}
+                .header {{ text-align: center; margin-bottom: 30px; }}
+                .trip-info {{ margin-bottom: 20px; }}
+                .day-plan {{ margin-bottom: 30px; border: 1px solid #ddd; padding: 15px; }}
+                .activity {{ margin-bottom: 10px; }}
+                .budget {{ background: #f9f9f9; padding: 10px; margin-top: 20px; }}
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h1>{trip.get('title', 'Trip Plan')}</h1>
+                <p>Generated on {datetime.now().strftime('%B %d, %Y')}</p>
+            </div>
+            
+            <div class="trip-info">
+                <h2>Trip Information</h2>
+                <p><strong>Duration:</strong> {trip.get('preferences', {}).get('duration_days', 0)} days</p>
+                <p><strong>Budget Level:</strong> {trip.get('preferences', {}).get('budget_level', 'moderate')}</p>
+                <p><strong>Group Size:</strong> {trip.get('preferences', {}).get('group_size', 0)} people</p>
+                <p><strong>Total Budget:</strong> ${trip.get('total_budget', 0):.2f}</p>
+            </div>
+        """
+        
+        # Add daily plans
+        for day_plan in trip.get('daily_itineraries', []):
+            html += f"""
+            <div class="day-plan">
+                <h3>Day {day_plan.get('day_number', 0)} - {day_plan.get('location', 'Unknown')}</h3>
+                <p><strong>Estimated Cost:</strong> ${day_plan.get('estimated_cost', 0):.2f}</p>
+                
+                <h4>Activities:</h4>
+            """
+            
+            for activity in day_plan.get('activities', []):
+                html += f"""
+                <div class="activity">
+                    <strong>{activity.get('name', 'Activity')}</strong><br>
+                    {activity.get('description', '')}<br>
+                    Duration: {activity.get('duration', '')} | Cost: ${activity.get('cost', 0)}
+                </div>
+                """
+            
+            html += """
+                </div>
+            """
+        
+        html += """
+        </body>
+        </html>
+        """
+        
+        return html
+        
+    except Exception as e:
+        logger.error(f"Error generating trip HTML: {str(e)}")
+        return f"<html><body><h1>Error generating trip plan</h1><p>{str(e)}</p></body></html>"
 
 
 # MFA Security Routes
