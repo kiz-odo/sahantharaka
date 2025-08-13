@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Lanka Tourism Chatbot Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .chat-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #FF6B35 0%, #F7931E 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .chat-header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+
+        .language-selector {
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .lang-btn:hover,
+        .lang-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .guide-selector {
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .guide-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .guide-btn:hover,
+        .guide-btn.active {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message.user {
+            text-align: right;
+        }
+
+        .message.bot {
+            text-align: left;
+        }
+
+        .message-bubble {
+            display: inline-block;
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+
+        .message.user .message-bubble {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .message.bot .message-bubble {
+            background: white;
+            color: #333;
+            border: 1px solid #e1e5e9;
+        }
+
+        .message-info {
+            font-size: 11px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .suggestions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        .suggestion-btn {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            color: #2196f3;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-btn:hover {
+            background: #2196f3;
+            color: white;
+        }
+
+        .chat-input {
+            border-top: 1px solid #e1e5e9;
+            padding: 20px;
+            background: white;
+        }
+
+        .input-container {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .message-input {
+            flex: 1;
+            border: 2px solid #e1e5e9;
+            border-radius: 25px;
+            padding: 12px 20px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s ease;
+            resize: none;
+            max-height: 100px;
+            min-height: 50px;
+        }
+
+        .message-input:focus {
+            border-color: #667eea;
+        }
+
+        .send-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            color: #666;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 2px;
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #666;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { opacity: 0.5; }
+            40% { opacity: 1; }
+        }
+
+        .status-indicator {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-online {
+            background: #4caf50;
+            color: white;
+        }
+
+        .status-offline {
+            background: #f44336;
+            color: white;
+        }
+
+        .error-message {
+            background: #ffebee;
+            border: 1px solid #f44336;
+            color: #c62828;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .chat-container {
+                height: 100vh;
+                border-radius: 0;
+                max-width: none;
+            }
+            
+            .message-bubble {
+                max-width: 85%;
+            }
+            
+            .language-selector {
+                gap: 5px;
+            }
+            
+            .lang-btn {
+                padding: 4px 8px;
+                font-size: 11px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="status-indicator" id="statusIndicator">🔴 Offline</div>
+            <h1>🇱🇰 Sri Lanka Tourism Chatbot</h1>
+            <p>Your friendly multilingual travel assistant</p>
+            
+            <div class="language-selector">
+                <button class="lang-btn active" data-lang="en">🇺🇸 English</button>
+                <button class="lang-btn" data-lang="si">🇱🇰 සිංහල</button>
+                <button class="lang-btn" data-lang="ta">🇮🇳 தமிழ்</button>
+                <button class="lang-btn" data-lang="zh">🇨🇳 中文</button>
+                <button class="lang-btn" data-lang="fr">🇫🇷 Français</button>
+            </div>
+            
+            <div class="guide-selector">
+                <button class="guide-btn active" data-guide="saru">👩 Saru</button>
+                <button class="guide-btn" data-guide="anjali">👩 Anjali</button>
+            </div>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            <!-- Messages will be added here -->
+        </div>
+        
+        <div class="typing-indicator" id="typingIndicator">
+            <span>Guide is typing</span>
+            <div class="typing-dots">
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+                <div class="typing-dot"></div>
+            </div>
+        </div>
+        
+        <div class="chat-input">
+            <div class="input-container">
+                <textarea 
+                    class="message-input" 
+                    id="messageInput" 
+                    placeholder="Ask me anything about Sri Lanka tourism..."
+                    rows="1"
+                ></textarea>
+                <button class="send-btn" id="sendBtn" disabled>
+                    ➤
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class TourismChatbot {
+            constructor() {
+                this.sessionId = null;
+                this.currentLanguage = 'en';
+                this.currentGuide = 'saru';
+                this.isOnline = false;
+                this.messageCount = 0;
+                
+                this.initializeElements();
+                this.attachEventListeners();
+                this.initializeSession();
+            }
+            
+            initializeElements() {
+                this.messagesContainer = document.getElementById('chatMessages');
+                this.messageInput = document.getElementById('messageInput');
+                this.sendBtn = document.getElementById('sendBtn');
+                this.typingIndicator = document.getElementById('typingIndicator');
+                this.statusIndicator = document.getElementById('statusIndicator');
+                
+                this.langBtns = document.querySelectorAll('.lang-btn');
+                this.guideBtns = document.querySelectorAll('.guide-btn');
+            }
+            
+            attachEventListeners() {
+                // Send message on button click
+                this.sendBtn.addEventListener('click', () => this.sendMessage());
+                
+                // Send message on Enter (Shift+Enter for new line)
+                this.messageInput.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+                
+                // Auto-resize textarea
+                this.messageInput.addEventListener('input', () => {
+                    this.autoResizeTextarea();
+                    this.updateSendButton();
+                });
+                
+                // Language selector
+                this.langBtns.forEach(btn => {
+                    btn.addEventListener('click', () => this.switchLanguage(btn.dataset.lang));
+                });
+                
+                // Guide selector
+                this.guideBtns.forEach(btn => {
+                    btn.addEventListener('click', () => this.switchGuide(btn.dataset.guide));
+                });
+            }
+            
+            autoResizeTextarea() {
+                this.messageInput.style.height = 'auto';
+                this.messageInput.style.height = Math.min(this.messageInput.scrollHeight, 100) + 'px';
+            }
+            
+            updateSendButton() {
+                const hasText = this.messageInput.value.trim().length > 0;
+                this.sendBtn.disabled = !hasText || !this.isOnline;
+            }
+            
+            async initializeSession() {
+                try {
+                    this.showTyping();
+                    const response = await this.apiCall('/api/chatbot/session/create', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            language: this.currentLanguage
+                        })
+                    });
+                    
+                    if (response.session_id) {
+                        this.sessionId = response.session_id;
+                        this.setOnlineStatus(true);
+                        
+                        // Display greeting
+                        if (response.greeting) {
+                            this.displayMessage(response.greeting, 'bot');
+                        }
+                    }
+                } catch (error) {
+                    this.displayError('Failed to initialize chatbot session. Please refresh the page.');
+                    console.error('Session initialization error:', error);
+                } finally {
+                    this.hideTyping();
+                }
+            }
+            
+            async sendMessage() {
+                const message = this.messageInput.value.trim();
+                if (!message || !this.sessionId) return;
+                
+                // Display user message
+                this.displayMessage({ response: message }, 'user');
+                this.messageInput.value = '';
+                this.autoResizeTextarea();
+                this.updateSendButton();
+                
+                try {
+                    this.showTyping();
+                    
+                    const response = await this.apiCall('/api/chatbot/message', {
+                        method: 'POST',
+                        body: JSON.stringify({
+                            session_id: this.sessionId,
+                            message: message
+                        })
+                    });
+                    
+                    if (response.error) {
+                        this.displayError(response.error);
+                    } else {
+                        this.displayMessage(response, 'bot');
+                    }
+                    
+                } catch (error) {
+                    this.displayError('Failed to send message. Please try again.');
+                    console.error('Send message error:', error);
+                } finally {
+                    this.hideTyping();
+                }
+            }
+            
+            async switchLanguage(language) {
+                if (language === this.currentLanguage || !this.sessionId) return;
+                
+                try {
+                    await this.apiCall(`/api/chatbot/session/${this.sessionId}/language`, {
+                        method: 'PUT',
+                        body: JSON.stringify({ language })
+                    });
+                    
+                    this.currentLanguage = language;
+                    this.updateLanguageButtons();
+                    
+                } catch (error) {
+                    this.displayError('Failed to switch language.');
+                    console.error('Language switch error:', error);
+                }
+            }
+            
+            async switchGuide(guide) {
+                if (guide === this.currentGuide || !this.sessionId) return;
+                
+                try {
+                    await this.apiCall(`/api/chatbot/session/${this.sessionId}/guide`, {
+                        method: 'PUT',
+                        body: JSON.stringify({ guide })
+                    });
+                    
+                    this.currentGuide = guide;
+                    this.updateGuideButtons();
+                    
+                } catch (error) {
+                    this.displayError('Failed to switch guide.');
+                    console.error('Guide switch error:', error);
+                }
+            }
+            
+            displayMessage(response, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}`;
+                
+                const messageText = typeof response === 'string' ? response : response.response;
+                
+                const bubbleDiv = document.createElement('div');
+                bubbleDiv.className = 'message-bubble';
+                bubbleDiv.textContent = messageText;
+                
+                messageDiv.appendChild(bubbleDiv);
+                
+                // Add message info for bot messages
+                if (sender === 'bot' && typeof response === 'object') {
+                    const infoDiv = document.createElement('div');
+                    infoDiv.className = 'message-info';
+                    infoDiv.textContent = `${response.language || 'en'} • ${response.intent || 'unknown'} • ${this.currentGuide}`;
+                    messageDiv.appendChild(infoDiv);
+                    
+                    // Add suggestions
+                    if (response.suggestions && response.suggestions.length > 0) {
+                        const suggestionsDiv = document.createElement('div');
+                        suggestionsDiv.className = 'suggestions';
+                        
+                        response.suggestions.slice(0, 3).forEach(suggestion => {
+                            const suggestionBtn = document.createElement('button');
+                            suggestionBtn.className = 'suggestion-btn';
+                            suggestionBtn.textContent = suggestion;
+                            suggestionBtn.onclick = () => {
+                                this.messageInput.value = suggestion;
+                                this.updateSendButton();
+                                this.sendMessage();
+                            };
+                            suggestionsDiv.appendChild(suggestionBtn);
+                        });
+                        
+                        messageDiv.appendChild(suggestionsDiv);
+                    }
+                }
+                
+                this.messagesContainer.appendChild(messageDiv);
+                this.scrollToBottom();
+                this.messageCount++;
+            }
+            
+            displayError(errorMessage) {
+                const errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                errorDiv.textContent = errorMessage;
+                this.messagesContainer.appendChild(errorDiv);
+                this.scrollToBottom();
+            }
+            
+            showTyping() {
+                this.typingIndicator.style.display = 'flex';
+                this.scrollToBottom();
+            }
+            
+            hideTyping() {
+                this.typingIndicator.style.display = 'none';
+            }
+            
+            scrollToBottom() {
+                setTimeout(() => {
+                    this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+                }, 100);
+            }
+            
+            setOnlineStatus(online) {
+                this.isOnline = online;
+                this.statusIndicator.textContent = online ? '🟢 Online' : '🔴 Offline';
+                this.statusIndicator.className = `status-indicator ${online ? 'status-online' : 'status-offline'}`;
+                this.updateSendButton();
+            }
+            
+            updateLanguageButtons() {
+                this.langBtns.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.lang === this.currentLanguage);
+                });
+            }
+            
+            updateGuideButtons() {
+                this.guideBtns.forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.guide === this.currentGuide);
+                });
+            }
+            
+            async apiCall(endpoint, options = {}) {
+                const defaultOptions = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+                
+                const response = await fetch(endpoint, { ...defaultOptions, ...options });
+                
+                if (!response.ok) {
+                    throw new Error(`API call failed: ${response.status}`);
+                }
+                
+                return await response.json();
+            }
+        }
+        
+        // Initialize chatbot when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            window.chatbot = new TourismChatbot();
+        });
+    </script>
+</body>
+</html>
