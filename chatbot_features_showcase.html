@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Lanka Tourism Chatbot - Feature Showcase</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .feature-description {
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .feature-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .feature-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            position: relative;
+            padding-left: 25px;
+        }
+
+        .feature-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .language-showcase {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .language-showcase h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 2rem;
+        }
+
+        .languages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .language-item {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .language-item:hover {
+            border-color: #667eea;
+            transform: scale(1.05);
+        }
+
+        .language-item.active {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .language-flag {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .language-name {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .language-status {
+            font-size: 0.9rem;
+            color: #28a745;
+        }
+
+        .security-showcase {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .security-showcase h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+            font-size: 2rem;
+        }
+
+        .security-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .security-method {
+            padding: 20px;
+            border: 2px solid #eee;
+            border-radius: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .security-method:hover {
+            border-color: #dc3545;
+            transform: scale(1.02);
+        }
+
+        .security-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #dc3545;
+        }
+
+        .security-name {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .security-level {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .security-level.high {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .security-level.medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .cta-section {
+            text-align: center;
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .cta-description {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .stats-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            text-align: center;
+        }
+
+        .stat-item {
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .languages-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .security-methods {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>🇱🇰 Sri Lanka Tourism Chatbot</h1>
+            <p>Your Intelligent Multilingual Travel Companion</p>
+        </div>
+
+        <!-- Language Showcase -->
+        <div class="language-showcase">
+            <h2>🌍 Multilingual Support</h2>
+            <div class="languages-grid">
+                <div class="language-item active">
+                    <div class="language-flag">🇺🇸</div>
+                    <div class="language-name">English</div>
+                    <div class="language-status">Available</div>
+                </div>
+                <div class="language-item active">
+                    <div class="language-flag">🇱🇰</div>
+                    <div class="language-name">Sinhala</div>
+                    <div class="language-status">Available</div>
+                </div>
+                <div class="language-item active">
+                    <div class="language-flag">🇮🇳</div>
+                    <div class="language-name">Tamil</div>
+                    <div class="language-status">Available</div>
+                </div>
+                <div class="language-item active">
+                    <div class="language-flag">🇨🇳</div>
+                    <div class="language-name">Chinese</div>
+                    <div class="language-status">New!</div>
+                </div>
+                <div class="language-item active">
+                    <div class="language-flag">🇫🇷</div>
+                    <div class="language-name">French</div>
+                    <div class="language-status">New!</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <!-- Core Features -->
+            <div class="feature-card">
+                <div class="feature-icon">🤖</div>
+                <div class="feature-title">Intelligent Chatbot</div>
+                <div class="feature-description">
+                    Advanced AI-powered chatbot with natural language understanding and contextual responses.
+                </div>
+                <ul class="feature-list">
+                    <li>Intent recognition & entity extraction</li>
+                    <li>Context-aware conversations</li>
+                    <li>Personality-driven responses</li>
+                    <li>Multi-turn dialogue management</li>
+                </ul>
+            </div>
+
+            <!-- Tourism Information -->
+            <div class="feature-card">
+                <div class="feature-icon">🏛️</div>
+                <div class="feature-title">Comprehensive Tourism Info</div>
+                <div class="feature-description">
+                    Detailed information about Sri Lanka's attractions, culture, food, and travel essentials.
+                </div>
+                <ul class="feature-list">
+                    <li>Historical sites & landmarks</li>
+                    <li>Local cuisine & restaurants</li>
+                    <li>Cultural etiquette & customs</li>
+                    <li>Transportation & accommodation</li>
+                </ul>
+            </div>
+
+            <!-- Voice Features -->
+            <div class="feature-card">
+                <div class="feature-icon">🎤</div>
+                <div class="feature-title">Voice Assistant</div>
+                <div class="feature-description">
+                    Advanced voice interaction with speech-to-text and text-to-speech capabilities.
+                </div>
+                <ul class="feature-list">
+                    <li>Speech recognition in 5 languages</li>
+                    <li>Natural voice responses</li>
+                    <li>Emotion detection</li>
+                    <li>Voice biometrics</li>
+                </ul>
+            </div>
+
+            <!-- Image Recognition -->
+            <div class="feature-card">
+                <div class="feature-icon">📸</div>
+                <div class="feature-title">Image Recognition</div>
+                <div class="feature-description">
+                    Identify Sri Lankan landmarks and attractions from uploaded photos.
+                </div>
+                <ul class="feature-list">
+                    <li>Landmark identification</li>
+                    <li>Feature extraction & analysis</li>
+                    <li>Cultural context information</li>
+                    <li>Tourist recommendations</li>
+                </ul>
+            </div>
+
+            <!-- Real-time Data -->
+            <div class="feature-card">
+                <div class="feature-icon">🌤️</div>
+                <div class="feature-title">Real-time Information</div>
+                <div class="feature-description">
+                    Live data integration for weather, events, transport, and currency.
+                </div>
+                <ul class="feature-list">
+                    <li>Weather forecasts & alerts</li>
+                    <li>Local events & festivals</li>
+                    <li>Transport schedules & routes</li>
+                    <li>Currency conversion rates</li>
+                </ul>
+            </div>
+
+            <!-- Cultural Features -->
+            <div class="feature-card">
+                <div class="feature-icon">🎭</div>
+                <div class="feature-title">Cultural Learning</div>
+                <div class="feature-description">
+                    Interactive cultural education through quizzes, games, and local phrases.
+                </div>
+                <ul class="feature-list">
+                    <li>Cultural quizzes & challenges</li>
+                    <li>Local language phrases</li>
+                    <li>Cultural etiquette tips</li>
+                    <li>Virtual tour guides</li>
+                </ul>
+            </div>
+
+            <!-- AI Recommendations -->
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <div class="feature-title">AI Recommendations</div>
+                <div class="feature-description">
+                    Personalized suggestions based on preferences, location, and behavior.
+                </div>
+                <ul class="feature-list">
+                    <li>Smart attraction recommendations</li>
+                    <li>Personalized itineraries</li>
+                    <li>Learning-based suggestions</li>
+                    <li>Multi-factor scoring</li>
+                </ul>
+            </div>
+
+            <!-- Analytics Dashboard -->
+            <div class="feature-card">
+                <div class="feature-icon">📊</div>
+                <div class="feature-title">Analytics & Insights</div>
+                <div class="feature-description">
+                    Comprehensive analytics for user engagement and chatbot performance.
+                </div>
+                <ul class="feature-list">
+                    <li>Conversation analytics</li>
+                    <li>User engagement metrics</li>
+                    <li>Performance monitoring</li>
+                    <li>Automated insights</li>
+                </ul>
+            </div>
+
+            <!-- Gamification -->
+            <div class="feature-card">
+                <div class="feature-icon">🏆</div>
+                <div class="feature-title">Gamification System</div>
+                <div class="feature-description">
+                    Engaging reward system with achievements, challenges, and progress tracking.
+                </div>
+                <ul class="feature-list">
+                    <li>Experience points & levels</li>
+                    <li>Achievement badges</li>
+                    <li>Cultural challenges</li>
+                    <li>Leaderboards & rankings</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Security Showcase -->
+        <div class="security-showcase">
+            <h2>🔐 Enterprise-Grade Security</h2>
+            <div class="security-methods">
+                <div class="security-method">
+                    <div class="security-icon">🔑</div>
+                    <div class="security-name">TOTP Authentication</div>
+                    <div class="security-level high">High Security</div>
+                    <div class="feature-description">Time-based one-time passwords for secure access</div>
+                </div>
+                <div class="security-method">
+                    <div class="security-icon">📱</div>
+                    <div class="security-name">SMS Verification</div>
+                    <div class="security-level medium">Medium Security</div>
+                    <div class="feature-description">SMS-based verification codes</div>
+                </div>
+                <div class="security-method">
+                    <div class="security-icon">📧</div>
+                    <div class="security-name">Email Verification</div>
+                    <div class="security-level medium">Medium Security</div>
+                    <div class="feature-description">Email-based verification codes</div>
+                </div>
+                <div class="security-method">
+                    <div class="security-icon">👁️</div>
+                    <div class="security-name">Biometric Auth</div>
+                    <div class="security-level high">High Security</div>
+                    <div class="feature-description">Fingerprint and face recognition</div>
+                </div>
+                <div class="security-method">
+                    <div class="security-icon">🔢</div>
+                    <div class="security-name">Backup Codes</div>
+                    <div class="security-level medium">Medium Security</div>
+                    <div class="feature-description">Recovery codes for account access</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="stats-section">
+            <h2 style="text-align: center; margin-bottom: 30px; color: #333;">📈 Platform Statistics</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Languages Supported</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Features Available</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Availability</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">99.9%</div>
+                    <div class="stat-label">Uptime</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="cta-section">
+            <div class="cta-title">Ready to Experience Sri Lanka?</div>
+            <div class="cta-description">
+                Join thousands of travelers who are already using our intelligent chatbot to explore the wonders of Sri Lanka.
+                Get personalized recommendations, cultural insights, and real-time assistance in your preferred language.
+            </div>
+            <div class="cta-buttons">
+                <a href="#" class="btn btn-primary">Start Chatting Now</a>
+                <a href="#" class="btn btn-secondary">Learn More</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Interactive language selection
+        document.querySelectorAll('.language-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.language-item').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Animate feature cards on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Apply initial styles and observe
+        document.querySelectorAll('.feature-card').forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(30px)';
+            card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+            observer.observe(card);
+        });
+
+        // Smooth scroll for navigation
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add some interactive elements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate stats on load
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach((stat, index) => {
+                setTimeout(() => {
+                    stat.style.transform = 'scale(1.1)';
+                    setTimeout(() => {
+                        stat.style.transform = 'scale(1)';
+                    }, 200);
+                }, index * 200);
+            });
+
+            // Add hover effects to security methods
+            document.querySelectorAll('.security-method').forEach(method => {
+                method.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.05)';
+                });
+                
+                method.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

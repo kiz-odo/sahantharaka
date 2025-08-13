@@ -12,6 +12,7 @@ import uuid
 from datetime import datetime
 
 from ..chatbot import TourismChatbot
+from ..chatbot.security_manager import SecurityManager, MFAMethod
 
 logger = logging.getLogger(__name__)
 
@@ -20,6 +21,9 @@ chatbot_bp = Blueprint('chatbot', __name__, url_prefix='/api/chatbot')
 
 # Initialize chatbot instance
 chatbot = TourismChatbot()
+
+# Initialize security manager
+security_manager = SecurityManager()
 
 @chatbot_bp.route('/chat', methods=['POST'])
 @cross_origin()
@@ -493,6 +497,333 @@ def health_check():
         return jsonify({
             'status': 'unhealthy',
             'error': str(e),
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+# MFA Security Routes
+@chatbot_bp.route('/security/mfa/setup', methods=['POST'])
+@cross_origin()
+def setup_mfa():
+    """
+    Setup MFA for a user.
+    
+    Expected JSON payload:
+    {
+        "user_id": "Unique user identifier",
+        "method": "totp|sms|email|biometric|backup_codes",
+        "additional_data": {
+            "phone_number": "Phone number for SMS",
+            "email": "Email for email verification"
+        }
+    }
+    
+    Returns:
+    {
+        "status": "success",
+        "method": "MFA method",
+        "setup_info": "Setup information",
+        "instructions": "Setup instructions"
+    }
+    """
+    try:
+        data = request.get_json()
+        
+        if not data or 'user_id' not in data or 'method' not in data:
+            return jsonify({
+                'error': 'Missing required fields: user_id, method',
+                'status': 'error'
+            }), 400
+        
+        user_id = data.get('user_id')
+        method_str = data.get('method')
+        additional_data = data.get('additional_data', {})
+        
+        # Validate MFA method
+        try:
+            method = MFAMethod(method_str)
+        except ValueError:
+            return jsonify({
+                'error': f'Invalid MFA method: {method_str}',
+                'status': 'error'
+            }), 400
+        
+        # Setup MFA
+        setup_info = security_manager.setup_mfa(user_id, method, additional_data)
+        
+        result = {
+            'status': 'success',
+            'method': method.value,
+            'setup_info': setup_info,
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        logger.info(f"MFA setup initiated for user {user_id} with method {method.value}")
+        
+        return jsonify(result), 200
+        
+    except Exception as e:
+        logger.error(f"Error setting up MFA: {str(e)}")
+        return jsonify({
+            'error': 'MFA setup failed',
+            'status': 'error',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+@chatbot_bp.route('/security/mfa/verify', methods=['POST'])
+@cross_origin()
+def verify_mfa():
+    """
+    Verify MFA code for a user.
+    
+    Expected JSON payload:
+    {
+        "user_id": "Unique user identifier",
+        "method": "totp|sms|email|biometric|backup_codes",
+        "code": "Verification code",
+        "additional_data": "Additional data for verification"
+    }
+    
+    Returns:
+    {
+        "status": "success|failed",
+        "verified": true|false,
+        "message": "Verification result message"
+    }
+    """
+    try:
+        data = request.get_json()
+        
+        if not data or 'user_id' not in data or 'method' not in data or 'code' not in data:
+            return jsonify({
+                'error': 'Missing required fields: user_id, method, code',
+                'status': 'error'
+            }), 400
+        
+        user_id = data.get('user_id')
+        method_str = data.get('method')
+        code = data.get('code')
+        additional_data = data.get('additional_data', {})
+        
+        # Validate MFA method
+        try:
+            method = MFAMethod(method_str)
+        except ValueError:
+            return jsonify({
+                'error': f'Invalid MFA method: {method_str}',
+                'status': 'error'
+            }), 400
+        
+        # Verify MFA
+        is_verified = security_manager.verify_mfa(user_id, method, code, additional_data)
+        
+        if is_verified:
+            result = {
+                'status': 'success',
+                'verified': True,
+                'message': 'MFA verification successful',
+                'timestamp': datetime.now().isoformat()
+            }
+        else:
+            result = {
+                'status': 'failed',
+                'verified': False,
+                'message': 'MFA verification failed',
+                'timestamp': datetime.now().isoformat()
+            }
+        
+        logger.info(f"MFA verification for user {user_id} with method {method.value}: {'success' if is_verified else 'failed'}")
+        
+        return jsonify(result), 200 if is_verified else 401
+        
+    except Exception as e:
+        logger.error(f"Error verifying MFA: {str(e)}")
+        return jsonify({
+            'error': 'MFA verification failed',
+            'status': 'error',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+@chatbot_bp.route('/security/mfa/status/<user_id>', methods=['GET'])
+@cross_origin()
+def get_mfa_status(user_id):
+    """
+    Get MFA status for a user.
+    
+    Returns:
+    {
+        "status": "success",
+        "mfa_enabled": true|false,
+        "methods": [
+            {
+                "method": "totp",
+                "name": "Time-based One-Time Password",
+                "security_level": "high",
+                "last_used": "Last used timestamp"
+            }
+        ],
+        "total_methods": 1
+    }
+    """
+    try:
+        mfa_status = security_manager.get_user_mfa_status(user_id)
+        
+        result = {
+            'status': 'success',
+            'user_id': user_id,
+            'mfa_status': mfa_status,
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        return jsonify(result), 200
+        
+    except Exception as e:
+        logger.error(f"Error getting MFA status for user {user_id}: {str(e)}")
+        return jsonify({
+            'error': 'Failed to get MFA status',
+            'status': 'error',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+@chatbot_bp.route('/security/events', methods=['GET'])
+@cross_origin()
+def get_security_events():
+    """
+    Get security events with optional filtering.
+    
+    Query parameters:
+    - user_id: Filter by specific user
+    - event_type: Filter by event type
+    - limit: Limit number of results (default: 100)
+    
+    Returns:
+    {
+        "status": "success",
+        "events": [
+            {
+                "event_id": "Event identifier",
+                "user_id": "User identifier",
+                "event_type": "Event type",
+                "description": "Event description",
+                "timestamp": "Event timestamp",
+                "severity": "Event severity"
+            }
+        ],
+        "total_events": 10
+    }
+    """
+    try:
+        user_id = request.args.get('user_id')
+        event_type = request.args.get('event_type')
+        limit = int(request.args.get('limit', 100))
+        
+        events = security_manager.get_security_events(user_id, event_type, limit)
+        
+        result = {
+            'status': 'success',
+            'events': events,
+            'total_events': len(events),
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        return jsonify(result), 200
+        
+    except Exception as e:
+        logger.error(f"Error getting security events: {str(e)}")
+        return jsonify({
+            'error': 'Failed to get security events',
+            'status': 'error',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+@chatbot_bp.route('/security/stats', methods=['GET'])
+@cross_origin()
+def get_security_stats():
+    """
+    Get security statistics.
+    
+    Returns:
+    {
+        "status": "success",
+        "stats": {
+            "total_users": 100,
+            "users_with_mfa": 75,
+            "mfa_adoption_rate": 75.0,
+            "total_security_events": 150,
+            "recent_security_events_24h": 5,
+            "locked_users": 2,
+            "security_status": "healthy"
+        }
+    }
+    """
+    try:
+        stats = security_manager.get_security_stats()
+        
+        result = {
+            'status': 'success',
+            'stats': stats,
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        return jsonify(result), 200
+        
+    except Exception as e:
+        logger.error(f"Error getting security stats: {str(e)}")
+        return jsonify({
+            'error': 'Failed to get security stats',
+            'status': 'error',
+            'timestamp': datetime.now().isoformat()
+        }), 500
+
+
+@chatbot_bp.route('/security/mfa/methods', methods=['GET'])
+@cross_origin()
+def get_mfa_methods():
+    """
+    Get available MFA methods and their information.
+    
+    Returns:
+    {
+        "status": "success",
+        "methods": {
+            "totp": {
+                "name": "Time-based One-Time Password",
+                "security_level": "high",
+                "user_experience": "good",
+                "implementation_effort": "medium",
+                "cost": "low"
+            }
+        }
+    }
+    """
+    try:
+        methods_info = {}
+        for method, info in security_manager.mfa_methods.items():
+            methods_info[method.value] = {
+                'name': info['name'],
+                'security_level': info['security_level'].value,
+                'user_experience': info['user_experience'],
+                'implementation_effort': info['implementation_effort'],
+                'cost': info['cost']
+            }
+        
+        result = {
+            'status': 'success',
+            'methods': methods_info,
+            'timestamp': datetime.now().isoformat()
+        }
+        
+        return jsonify(result), 200
+        
+    except Exception as e:
+        logger.error(f"Error getting MFA methods: {str(e)}")
+        return jsonify({
+            'error': 'Failed to get MFA methods',
+            'status': 'error',
             'timestamp': datetime.now().isoformat()
         }), 500
 

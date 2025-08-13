@@ -1,7 +1,7 @@
 """
 Language Detection Component
 
-Detects the language of user input (Sinhala, Tamil, English) using
+Detects the language of user input (Sinhala, Tamil, English, Chinese, French) using
 multiple detection methods for accuracy.
 """
 
@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 
 class LanguageDetector:
     """
-    Multilingual language detector supporting Sinhala, Tamil, and English.
+    Multilingual language detector supporting Sinhala, Tamil, English, Chinese, and French.
     """
     
     def __init__(self):
@@ -38,7 +38,9 @@ class LanguageDetector:
         self.supported_languages = {
             'en': 'English',
             'si': 'Sinhala', 
-            'ta': 'Tamil'
+            'ta': 'Tamil',
+            'zh': 'Chinese',
+            'fr': 'French'
         }
         
         # Language-specific character patterns
@@ -63,6 +65,20 @@ class LanguageDetector:
                 'char_range': (0x0020, 0x007F),  # Basic Latin range
                 'common_chars': ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'],
                 'keywords': ['hello', 'thank', 'please', 'where', 'when', 'how', 'what']
+            },
+            'zh': {
+                'name': 'Chinese',
+                'script': 'Han',
+                'char_range': (0x4E00, 0x9FFF),  # CJK Unified Ideographs
+                'common_chars': ['你', '好', '谢', '谢', '请', '问', '什', '么', '在', '哪'],
+                'keywords': ['你好', '谢谢', '请问', '什么', '在哪里', '什么时候', '多少钱', '怎么去']
+            },
+            'fr': {
+                'name': 'French',
+                'script': 'Latin',
+                'char_range': (0x0020, 0x007F),  # Basic Latin range with accents
+                'common_chars': ['à', 'â', 'ä', 'ç', 'é', 'è', 'ê', 'ë', 'î', 'ï'],
+                'keywords': ['bonjour', 'merci', 's\'il', 'vous', 'plait', 'comment', 'où', 'quand', 'combien']
             }
         }
         
@@ -84,7 +100,7 @@ class LanguageDetector:
             text: Input text to analyze
             
         Returns:
-            Language code ('en', 'si', 'ta') or 'en' as default
+            Language code ('en', 'si', 'ta', 'zh', 'fr') or 'en' as default
         """
         if not text or not text.strip():
             return 'en'
@@ -99,14 +115,14 @@ class LanguageDetector:
         if pattern_result:
             detection_results.append(pattern_result)
         
-        # Method 2: Polyglot detection
+        # Method 2: Polyglot detection (if available)
         if POLYGLOT_AVAILABLE:
             polyglot_result = self._detect_by_polyglot(text)
             if polyglot_result:
                 detection_results.append(polyglot_result)
         
-        # Method 3: FastText detection
-        if self.fasttext_model:
+        # Method 3: FastText detection (if available)
+        if FASTTEXT_AVAILABLE and self.fasttext_model:
             fasttext_result = self._detect_by_fasttext(text)
             if fasttext_result:
                 detection_results.append(fasttext_result)
@@ -116,42 +132,32 @@ class LanguageDetector:
         if keyword_result:
             detection_results.append(keyword_result)
         
-        # Combine results and return most likely language
+        # Combine results and return best match
         if detection_results:
             return self._combine_detection_results(detection_results)
         
-        # Default to English if no detection method worked
+        # Default to English if no detection method succeeds
         return 'en'
     
     def _detect_by_patterns(self, text: str) -> Tuple[str, float]:
-        """Detect language using character pattern analysis."""
-        scores = {}
-        
-        for lang_code, lang_info in self.language_patterns.items():
-            score = 0
-            total_chars = 0
+        """Detect language using character patterns and Unicode ranges."""
+        try:
+            scores = {}
             
-            for char in text:
-                if char.isalpha():
-                    total_chars += 1
-                    char_code = ord(char)
-                    
-                    # Check if character is in language's Unicode range
-                    if (lang_info['char_range'][0] <= char_code <= lang_info['char_range'][1]):
-                        score += 1
-                    
-                    # Check if character is in common characters list
-                    if char in lang_info['common_chars']:
-                        score += 0.5
+            for lang_code, lang_info in self.language_patterns.items():
+                score = self._get_pattern_score(text, lang_code)
+                if score > 0:
+                    scores[lang_code] = score
             
-            if total_chars > 0:
-                scores[lang_code] = score / total_chars
-        
-        if scores:
-            best_lang = max(scores, key=scores.get)
-            return (best_lang, scores[best_lang])
-        
-        return None
+            if scores:
+                best_lang = max(scores, key=scores.get)
+                return best_lang, scores[best_lang]
+            
+            return None, 0.0
+            
+        except Exception as e:
+            logger.error(f"Error in pattern-based detection: {str(e)}")
+            return None, 0.0
     
     def _detect_by_polyglot(self, text: str) -> Tuple[str, float]:
         """Detect language using Polyglot library."""
@@ -284,20 +290,45 @@ class LanguageDetector:
         return stats
     
     def _get_pattern_score(self, text: str, lang_code: str) -> float:
-        """Get pattern detection score for a specific language."""
-        if lang_code not in self.language_patterns:
+        """Calculate pattern score for a specific language."""
+        try:
+            lang_info = self.language_patterns[lang_code]
+            score = 0.0
+            
+            # Check for script-specific characters
+            if lang_code == 'zh':
+                # Chinese: Check for Han characters
+                han_chars = sum(1 for char in text if '\u4e00' <= char <= '\u9fff')
+                if han_chars > 0:
+                    score += (han_chars / len(text)) * 2.0
+            elif lang_code == 'si':
+                # Sinhala: Check for Sinhala characters
+                sinhala_chars = sum(1 for char in text if '\u0d80' <= char <= '\u0dff')
+                if sinhala_chars > 0:
+                    score += (sinhala_chars / len(text)) * 2.0
+            elif lang_code == 'ta':
+                # Tamil: Check for Tamil characters
+                tamil_chars = sum(1 for char in text if '\u0b80' <= char <= '\u0bff')
+                if tamil_chars > 0:
+                    score += (tamil_chars / len(text)) * 2.0
+            elif lang_code == 'fr':
+                # French: Check for French-specific characters and patterns
+                french_chars = sum(1 for char in text if char in lang_info['common_chars'])
+                french_patterns = ['le ', 'la ', 'les ', 'un ', 'une ', 'des ', 'et ', 'ou ', 'avec ', 'pour ']
+                french_pattern_count = sum(1 for pattern in french_patterns if pattern in text.lower())
+                score += (french_chars / len(text)) * 1.5 + (french_pattern_count / len(text)) * 2.0
+            else:
+                # English: Check for common English patterns
+                english_patterns = ['the ', 'and ', 'or ', 'but ', 'in ', 'on ', 'at ', 'to ', 'for ', 'of ']
+                english_pattern_count = sum(1 for pattern in english_patterns if pattern in text.lower())
+                score += (english_pattern_count / len(text)) * 1.5
+            
+            # Check for common keywords
+            keyword_matches = sum(1 for keyword in lang_info['keywords'] if keyword.lower() in text.lower())
+            score += (keyword_matches / len(lang_info['keywords'])) * 1.0
+            
+            return score
+            
+        except Exception as e:
+            logger.error(f"Error calculating pattern score: {str(e)}")
             return 0.0
-        
-        lang_info = self.language_patterns[lang_code]
-        score = 0
-        total_chars = 0
-        
-        for char in text:
-            if char.isalpha():
-                total_chars += 1
-                char_code = ord(char)
-                
-                if (lang_info['char_range'][0] <= char_code <= lang_info['char_range'][1]):
-                    score += 1
-        
-        return score / total_chars if total_chars > 0 else 0.0

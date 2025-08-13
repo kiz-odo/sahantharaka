@@ -40,7 +40,7 @@ class TourismChatbot:
         self.user_sessions = {}
         
         # Supported languages
-        self.supported_languages = ['en', 'si', 'ta']  # English, Sinhala, Tamil
+        self.supported_languages = ['en', 'si', 'ta', 'zh', 'fr']  # English, Sinhala, Tamil, Chinese, French
         
         logger.info("Tourism Chatbot initialized successfully")
     

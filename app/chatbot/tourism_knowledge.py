@@ -83,6 +83,44 @@ class TourismKnowledgeBase:
                         'highlights': ['சிங்க பாத நுழைவு', 'சுவர் ஓவியங்கள்', 'கண்ணாடி சுவர்', 'ராஜ பூங்காக்கள்'],
                         'tips': ['வசதியான காலணிகள் அணியுங்கள்', 'தண்ணீர் கொண்டு வாருங்கள்', 'காலையில் செல்லுங்கள்', 'வரலாற்றுக்கு வழிகாட்டியை நியமிக்கவும்']
                     }
+                },
+                'zh': {
+                    'sigiriya': {
+                        'name': '锡吉里耶',
+                        'description': '锡吉里耶是一座宏伟的古代宫殿和堡垒建筑群，建在巨大的岩石柱上。被称为世界第八大奇迹。',
+                        'location': '斯里兰卡中部省',
+                        'best_time': '清晨或傍晚，避开人群和炎热',
+                        'entrance_fee': '外国人约30美元',
+                        'highlights': ['狮子爪入口', '壁画', '镜墙', '皇家花园'],
+                        'tips': ['穿舒适的鞋子', '带水', '清晨参观', '雇导游了解历史']
+                    },
+                    'kandy': {
+                        'name': '康提',
+                        'description': '斯里兰卡的文化之都，拥有神圣的佛牙寺。',
+                        'location': '斯里兰卡中部省',
+                        'best_time': '全年，但最好在佩拉赫拉节期间（7月/8月）',
+                        'highlights': ['佛牙寺', '皇家植物园', '康提湖', '文化表演'],
+                        'tips': ['参观寺庙时穿着得体', '观看文化舞蹈表演', '在佩拉赫拉节期间参观']
+                    }
+                },
+                'fr': {
+                    'sigiriya': {
+                        'name': 'Sigiriya',
+                        'description': 'Ancien palais et complexe de forteresse construit sur une colonne rocheuse massive. Connu comme la 8ème merveille du monde.',
+                        'location': 'Province centrale, Sri Lanka',
+                        'best_time': 'Tôt le matin ou en fin d\'après-midi pour éviter la foule et la chaleur',
+                        'entrance_fee': 'Environ 30 USD pour les étrangers',
+                        'highlights': ['Entrée de la patte du lion', 'Peintures murales', 'Mur miroir', 'Jardins royaux'],
+                        'tips': ['Portez des chaussures confortables', 'Apportez de l\'eau', 'Visitez tôt le matin', 'Engagez un guide pour l\'histoire']
+                    },
+                    'kandy': {
+                        'name': 'Kandy',
+                        'description': 'Capitale culturelle du Sri Lanka, abrite le Temple de la Dent Sacrée.',
+                        'location': 'Province centrale, Sri Lanka',
+                        'best_time': 'Toute l\'année, mais mieux pendant le festival Perahera (juillet/août)',
+                        'highlights': ['Temple de la Dent Sacrée', 'Jardins botaniques royaux', 'Lac de Kandy', 'Spectacles culturels'],
+                        'tips': ['Habillez-vous modestement pour les visites de temples', 'Assistez aux spectacles de danse culturelle', 'Visitez pendant Perahera']
+                    }
                 }
             },
             'food': {
@@ -98,7 +136,7 @@ class TourismKnowledgeBase:
                         'name': 'Hoppers (Appa)',
                         'description': 'Crispy, bowl-shaped pancakes made from rice flour and coconut milk.',
                         'ingredients': ['Rice flour', 'Coconut milk', 'Yeast', 'Sugar', 'Salt'],
-                        'best_places': ['Street food stalls', 'Traditional restaurants'],
+                        'best_places': ['Street vendors', 'Local cafes', 'Traditional restaurants'],
                         'tips': ['Best eaten hot and fresh', 'Try with curry or chutney']
                     },
                     'kottu_roti': {
@@ -124,23 +162,55 @@ class TourismKnowledgeBase:
                         'description': 'அரிசி மற்றும் பல்வேறு குழம்புகளுடன் பாரம்பரிய இலங்கை உணவு.',
                         'ingredients': ['அரிசி', 'மீன் குழம்பு', 'கோழி குழம்பு', 'தால்', 'காய்கறிகள்'],
                         'best_places': ['உள்ளூர் உணவகங்கள்', 'விருந்தோம்பல் வீடுகள்', 'வீட்டில் தங்குதல்'],
-                        'tips': ['உண்மையான அனுபவத்திற்கு கைகளால் முயற்சிக்கவும்', 'மசாலா அளவு விருப்பத்தைக் கேள்விப்படவும்']
+                        'tips': ['உண்மையான அனுபவத்திற்கு கைகளால் முயற்சிக்கவும்', 'மசாலா அளவு விருப்பத்தைக் கேள்வி']
+                    }
+                },
+                'zh': {
+                    'rice_and_curry': {
+                        'name': '咖喱饭',
+                        'description': '传统的斯里兰卡餐，配有米饭和各种咖喱。',
+                        'ingredients': ['米饭', '鱼咖喱', '鸡肉咖喱', '豆子', '蔬菜'],
+                        'best_places': ['当地餐厅', '民宿', '家庭旅馆'],
+                        'tips': ['用手尝试以获得真实体验', '询问辣度偏好']
+                    },
+                    'hoppers': {
+                        'name': '薄饼',
+                        'description': '用米粉和椰奶制成的脆脆碗状煎饼。',
+                        'ingredients': ['米粉', '椰奶', '酵母', '糖', '盐'],
+                        'best_places': ['街头小贩', '当地咖啡馆', '传统餐厅'],
+                        'tips': ['最好趁热新鲜食用', '配咖喱或酸辣酱']
+                    }
+                },
+                'fr': {
+                    'rice_and_curry': {
+                        'name': 'Riz et Curry',
+                        'description': 'Repas traditionnel sri-lankais avec du riz et divers currys.',
+                        'ingredients': ['Riz', 'Curry de poisson', 'Curry de poulet', 'Dhal', 'Légumes'],
+                        'best_places': ['Restaurants locaux', 'Maisons d\'hôtes', 'Séjours chez l\'habitant'],
+                        'tips': ['Essayez avec vos mains pour une expérience authentique', 'Demandez le niveau d\'épices préféré']
+                    },
+                    'hoppers': {
+                        'name': 'Hoppers (Appa)',
+                        'description': 'Crêpes croustillantes en forme de bol faites de farine de riz et de lait de coco.',
+                        'ingredients': ['Farine de riz', 'Lait de coco', 'Levure', 'Sucre', 'Sel'],
+                        'best_places': ['Vendeurs de rue', 'Cafés locaux', 'Restaurants traditionnels'],
+                        'tips': ['Meilleur mangé chaud et frais', 'Essayez avec du curry ou du chutney']
                     }
                 }
             },
             'culture': {
                 'en': {
                     'greeting': {
-                        'custom': 'Ayubowan (May you live long)',
-                        'gesture': 'Place palms together and bow slightly',
-                        'when_to_use': 'Meeting someone for the first time, entering a temple',
-                        'tips': ['Always greet elders first', 'Remove shoes before entering temples']
+                        'custom': 'Say "Ayubowan" (meaning "May you live long") with palms together',
+                        'meaning': 'Traditional greeting showing respect and good wishes',
+                        'when_to_use': 'Meeting people, entering temples, formal occasions',
+                        'variations': ['Ayubowan', 'Vanakkam (Tamil)', 'Hello (English)']
                     },
                     'temple_etiquette': {
                         'dress_code': 'Modest clothing, cover shoulders and knees',
-                        'behavior': 'Remove shoes, speak quietly, no photography of Buddha statues',
-                        'offerings': 'Flowers, incense, or oil lamps',
-                        'tips': ['Dress conservatively', 'Follow local customs', 'Ask permission before photos']
+                        'shoes': 'Remove shoes before entering',
+                        'behavior': 'Quiet and respectful, no photography in some areas',
+                        'offerings': 'Flowers, incense, or small donations welcome'
                     },
                     'festivals': {
                         'sinhala_new_year': {
@@ -157,18 +227,46 @@ class TourismKnowledgeBase:
                 },
                 'si': {
                     'greeting': {
-                        'custom': 'ආයුබෝවන් (ඔබ දිගු කාලයක් ජීවත් වේවා)',
-                        'gesture': 'අත් දෙක එකට තබා තරමක් නමස්කාර කරන්න',
-                        'when_to_use': 'මුලින්ම හමුවන අය, දේවාලයකට ඇතුළු වන විට',
-                        'tips': ['සැමවිටම වැඩිහිටියන් මුලින්ම ආයුබෝවන් කරන්න', 'දේවාලයකට ඇතුළු වීමට පෙර සපත්තු ඉවත් කරන්න']
+                        'custom': '"ආයුබෝවන්" (ඔබ දිගු කලක් ජීවත් වේවා යන අර්ථය) අත් දෙක එකට තබා කියන්න',
+                        'meaning': 'ගෞරවය සහ යහපත් ආශිර්වාද පෙන්වන සම්ප්‍රදායික පිළිගැනීම',
+                        'when_to_use': 'මිනිසුන් හමුවීම, දේවාලවලට ඇතුළු වීම, විධිමත් අවස්ථා',
+                        'variations': ['ආයුබෝවන්', 'வணக்கம் (දෙමළ)', 'Hello (ඉංග්‍රීසි)']
                     }
                 },
                 'ta': {
                     'greeting': {
-                        'custom': 'வணக்கம் (நீங்கள் நீண்ட காலம் வாழ்க)',
-                        'gesture': 'இரண்டு கைகளையும் சேர்த்து சிறிது வணங்குங்கள்',
-                        'when_to_use': 'முதன்முறையாக யாரையாவது சந்திக்கும்போது, கோவிலுக்குள் செல்லும்போது',
-                        'tips': ['எப்போதும் மூத்தவர்களை முதலில் வணங்குங்கள்', 'கோவிலுக்குள் செல்வதற்கு முன் காலணிகளை அகற்றவும்']
+                        'custom': '"வணக்கம்" (நீங்கள் நீண்ட காலம் வாழ்க என்பது பொருள்) கைகளை சேர்த்து கூறுங்கள்',
+                        'meaning': 'மரியாதை மற்றும் நல்ல வாழ்த்துக்களைக் காட்டும் பாரம்பரிய வணக்கம்',
+                        'when_to_use': 'மக்களை சந்திக்கும்போது, கோவில்களுக்குள் செல்லும்போது, முறையான சந்தர்ப்பங்களில்',
+                        'variations': ['வணக்கம்', 'ආයුබෝවන් (සිංහල)', 'Hello (ஆங்கிலம்)']
+                    }
+                },
+                'zh': {
+                    'greeting': {
+                        'custom': '说"阿育布万"（意为"愿你长寿"），双手合十',
+                        'meaning': '表示尊重和美好祝愿的传统问候',
+                        'when_to_use': '见面时、进入寺庙时、正式场合',
+                        'variations': ['阿育布万', 'வணக்கம் (泰米尔语)', 'Hello (英语)']
+                    },
+                    'temple_etiquette': {
+                        'dress_code': '穿着得体，遮盖肩膀和膝盖',
+                        'shoes': '进入前脱鞋',
+                        'behavior': '安静恭敬，某些区域禁止拍照',
+                        'offerings': '欢迎献花、香火或小额捐赠'
+                    }
+                },
+                'fr': {
+                    'greeting': {
+                        'custom': 'Dites "Ayubowan" (signifiant "Puissiez-vous vivre longtemps") avec les paumes jointes',
+                        'meaning': 'Salutation traditionnelle montrant le respect et les bons vœux',
+                        'when_to_use': 'Rencontrer des gens, entrer dans les temples, occasions formelles',
+                        'variations': ['Ayubowan', 'வணக்கம் (Tamoul)', 'Hello (Anglais)']
+                    },
+                    'temple_etiquette': {
+                        'dress_code': 'Vêtements modestes, couvrir les épaules et les genoux',
+                        'shoes': 'Retirer les chaussures avant d\'entrer',
+                        'behavior': 'Silencieux et respectueux, pas de photographie dans certaines zones',
+                        'offerings': 'Fleurs, encens ou petits dons bienvenus'
                     }
                 }
             },

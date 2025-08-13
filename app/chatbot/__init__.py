@@ -2,12 +2,13 @@
 Sri Lanka Tourism Multilingual Chatbot Package
 
 This package provides a comprehensive multilingual chatbot solution for Sri Lanka tourism,
-supporting Sinhala, Tamil, and English languages with tourism-specific knowledge.
+supporting Sinhala, Tamil, English, Chinese, and French languages with advanced security features.
 """
 
 from .bot import TourismChatbot
 from .language_detector import LanguageDetector
 from .tourism_knowledge import TourismKnowledgeBase
+from .security_manager import SecurityManager
 
 __version__ = "1.0.0"
 __author__ = "Sri Lanka Tourism Team"
@@ -15,5 +16,6 @@ __author__ = "Sri Lanka Tourism Team"
 __all__ = [
     "TourismChatbot",
     "LanguageDetector", 
-    "TourismKnowledgeBase"
+    "TourismKnowledgeBase",
+    "SecurityManager"
 ]
