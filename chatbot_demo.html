@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sri Lanka Tourism Chatbot Demo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .chat-container {
+            display: flex;
+            height: 600px;
+        }
+
+        .chat-sidebar {
+            width: 300px;
+            background: #f8f9fa;
+            border-right: 1px solid #e9ecef;
+            padding: 20px;
+        }
+
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .message.user {
+            justify-content: flex-end;
+        }
+
+        .message.bot {
+            justify-content: flex-start;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            background: #007bff;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.bot .message-content {
+            background: white;
+            color: #333;
+            border: 1px solid #e9ecef;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin: 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+        }
+
+        .message.user .message-avatar {
+            background: #007bff;
+        }
+
+        .message.bot .message-avatar {
+            background: #28a745;
+        }
+
+        .chat-input {
+            padding: 20px;
+            border-top: 1px solid #e9ecef;
+            background: white;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .chat-input input:focus {
+            border-color: #007bff;
+        }
+
+        .chat-input button {
+            padding: 12px 25px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .chat-input button:hover {
+            background: #0056b3;
+        }
+
+        .chat-input button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .language-selector {
+            margin-bottom: 20px;
+        }
+
+        .language-selector label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .language-selector select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .guide-selector {
+            margin-bottom: 20px;
+        }
+
+        .guide-selector label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .guide-selector select {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .stats {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stats h3 {
+            margin-bottom: 10px;
+            color: #495057;
+            font-size: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .stat-label {
+            color: #6c757d;
+        }
+
+        .stat-value {
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .clear-btn {
+            width: 100%;
+            padding: 10px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .clear-btn:hover {
+            background: #c82333;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 12px 18px;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 20px;
+            border-bottom-left-radius: 5px;
+            margin-bottom: 15px;
+            max-width: 70%;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: #6c757d;
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 5px;
+            text-align: center;
+        }
+
+        .intent-badge {
+            display: inline-block;
+            background: #17a2b8;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 4px;
+            background: #e9ecef;
+            border-radius: 2px;
+            margin-top: 5px;
+            overflow: hidden;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: #28a745;
+            transition: width 0.3s ease;
+        }
+
+        .welcome-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6c757d;
+        }
+
+        .welcome-message h3 {
+            margin-bottom: 15px;
+            color: #495057;
+        }
+
+        .welcome-message p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .example-queries {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .example-queries h4 {
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        .example-query {
+            background: white;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 14px;
+        }
+
+        .example-query:hover {
+            background: #f8f9fa;
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .chat-sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e9ecef;
+            }
+            
+            .container {
+                margin: 10px;
+                border-radius: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🇱🇰 Sri Lanka Tourism Chatbot</h1>
+            <p>Your multilingual virtual tour guide for exploring the Pearl of the Indian Ocean</p>
+        </div>
+        
+        <div class="chat-container">
+            <div class="chat-sidebar">
+                <div class="language-selector">
+                    <label for="language">Language:</label>
+                    <select id="language">
+                        <option value="en">English</option>
+                        <option value="si">සිංහල (Sinhala)</option>
+                        <option value="ta">தமிழ் (Tamil)</option>
+                    </select>
+                </div>
+                
+                <div class="guide-selector">
+                    <label for="guide">Tour Guide:</label>
+                    <select id="guide">
+                        <option value="Saru">Saru</option>
+                        <option value="Anjali">Anjali</option>
+                    </select>
+                </div>
+                
+                <div class="stats">
+                    <h3>Conversation Stats</h3>
+                    <div class="stat-item">
+                        <span class="stat-label">Messages:</span>
+                        <span class="stat-value" id="message-count">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Languages:</span>
+                        <span class="stat-value" id="languages-used">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Current Guide:</span>
+                        <span class="stat-value" id="current-guide">Saru</span>
+                    </div>
+                </div>
+                
+                <button class="clear-btn" onclick="clearChat()">Clear Chat</button>
+                
+                <div class="example-queries">
+                    <h4>Try asking about:</h4>
+                    <div class="example-query" onclick="setExampleQuery('Tell me about Sigiriya')">
+                        🏰 Tell me about Sigiriya
+                    </div>
+                    <div class="example-query" onclick="setExampleQuery('What food should I try?')">
+                        🍽️ What food should I try?
+                    </div>
+                    <div class="example-query" onclick="setExampleQuery('How do I get around?')">
+                        🚌 How do I get around?
+                    </div>
+                    <div class="example-query" onclick="setExampleQuery('Where should I stay?')">
+                        🏨 Where should I stay?
+                    </div>
+                    <div class="example-query" onclick="setExampleQuery('Tell me about local customs')">
+                        🎭 Tell me about local customs
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-main">
+                <div class="chat-messages" id="chat-messages">
+                    <div class="welcome-message">
+                        <h3>Welcome to Sri Lanka! 🇱🇰</h3>
+                        <p>I'm your virtual tour guide, ready to help you explore this beautiful island!</p>
+                        <p>Ask me about:</p>
+                        <ul style="text-align: left; display: inline-block;">
+                            <li>🏰 Tourist attractions and landmarks</li>
+                            <li>🍽️ Local cuisine and food recommendations</li>
+                            <li>🚌 Transportation options</li>
+                            <li>🏨 Accommodation suggestions</li>
+                            <li>🎭 Cultural customs and etiquette</li>
+                        </ul>
+                        <p>I can communicate in English, Sinhala (සිංහල), and Tamil (தமிழ்).</p>
+                        <p>Start by saying hello or asking a question!</p>
+                    </div>
+                </div>
+                
+                <div class="typing-indicator" id="typing-indicator">
+                    <div class="typing-dots">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+                
+                <div class="chat-input">
+                    <div class="input-group">
+                        <input type="text" id="message-input" placeholder="Type your message here..." onkeypress="handleKeyPress(event)">
+                        <button onclick="sendMessage()" id="send-button">Send</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userId = 'demo_user_' + Math.random().toString(36).substr(2, 9);
+        let messageCount = 0;
+        let currentLanguage = 'en';
+        let currentGuide = 'Saru';
+        
+        // Initialize the chatbot
+        document.addEventListener('DOMContentLoaded', function() {
+            updateStats();
+            changeGuide();
+        });
+        
+        // Language selector change
+        document.getElementById('language').addEventListener('change', function() {
+            currentLanguage = this.value;
+            updateStats();
+        });
+        
+        // Guide selector change
+        document.getElementById('guide').addEventListener('change', function() {
+            currentGuide = this.value;
+            changeGuide();
+        });
+        
+        function changeGuide() {
+            // In a real implementation, this would call the API to change the guide
+            document.getElementById('current-guide').textContent = currentGuide;
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('message-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message to chat
+            addMessage(message, 'user');
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Simulate API call (replace with actual API call)
+            setTimeout(() => {
+                hideTypingIndicator();
+                processBotResponse(message);
+            }, 1000 + Math.random() * 2000); // Random delay to simulate processing
+        }
+        
+        function processBotResponse(userMessage) {
+            // Simulate bot response based on user message
+            let response = '';
+            let intent = 'unknown';
+            let confidence = 0.8;
+            
+            const messageLower = userMessage.toLowerCase();
+            
+            if (messageLower.includes('hello') || messageLower.includes('hi') || messageLower.includes('hey')) {
+                response = getGreetingResponse();
+                intent = 'greeting';
+            } else if (messageLower.includes('sigiriya')) {
+                response = getSigiriyaResponse();
+                intent = 'attraction_info';
+            } else if (messageLower.includes('food') || messageLower.includes('eat') || messageLower.includes('cuisine')) {
+                response = getFoodResponse();
+                intent = 'food_info';
+            } else if (messageLower.includes('transport') || messageLower.includes('bus') || messageLower.includes('train')) {
+                response = getTransportResponse();
+                intent = 'transport_info';
+            } else if (messageLower.includes('hotel') || messageLower.includes('stay') || messageLower.includes('accommodation')) {
+                response = getAccommodationResponse();
+                intent = 'accommodation_info';
+            } else if (messageLower.includes('culture') || messageLower.includes('custom') || messageLower.includes('etiquette')) {
+                response = getCultureResponse();
+                intent = 'culture_info';
+            } else if (messageLower.includes('bye') || messageLower.includes('goodbye') || messageLower.includes('thank')) {
+                response = getGoodbyeResponse();
+                intent = 'goodbye';
+            } else {
+                response = getFallbackResponse();
+                intent = 'unknown';
+            }
+            
+            // Add bot response to chat
+            addMessage(response, 'bot', intent, confidence);
+        }
+        
+        function getGreetingResponse() {
+            const greetings = {
+                'en': `Hi there! I'm ${currentGuide}, your friendly Sri Lanka tour guide! How can I help you explore this beautiful island today?`,
+                'si': `ආයුබෝවන්! මම ${currentGuide}, ඔබේ මිතුරා ශ්‍රී ලංකා සංචාරක මඟපෙන්වීම් කරන්නෙමි! අද මම ඔබට මෙම සුන්දර දිවයින ගවේෂණය කිරීමට කෙසේ උදව් කළ හැකිද?`,
+                'ta': `வணக்கம்! நான் ${currentGuide}, உங்கள் நட்பு இலங்கை சுற்றுலா வழிகாட்டி! இன்று இந்த அழகான தீவை ஆராய்ந்து கொள்ள நான் உங்களுக்கு எப்படி உதவ முடியும்?`
+            };
+            return greetings[currentLanguage] || greetings['en'];
+        }
+        
+        function getSigiriyaResponse() {
+            const responses = {
+                'en': "🏰 Sigiriya is an ancient palace and fortress complex built on a massive rock column. Known as the 8th wonder of the world, it's located in the Central Province. The best time to visit is early morning or late afternoon to avoid crowds and heat. Don't miss the Lion's Paw entrance, fresco paintings, and the mirror wall! 💡 Pro tip: Wear comfortable shoes and bring water - it's quite a climb!",
+                'si': "🏰 සීගිරිය යනු විශාල ගල් තීරුවක් මත ඉදිකර ඇති පුරාණ රාජ මාලිගාවක් සහ බලකොටුවකි. ලෝකයේ 8 වැනි ආශ්චර්‍යය ලෙස හැඳින්වේ. බහුල ජනයා සහ උණුසුම වළක්වා ගැනීමට උදෑසන හෝ සවස් කාලය යෝග්‍ය වේ.",
+                'ta': "🏰 சிகிரியா என்பது ஒரு பெரிய பாறை நெடுவரிசையில் கட்டப்பட்ட பழைய அரண்மனை மற்றும் கோட்டை வளாகமாகும். உலகின் 8 வது அதிசயமாக அறியப்படுகிறது. கூட்டம் மற்றும் வெப்பத்தைத் தவிர்க்க காலை அல்லது மாலை நேரம் சிறந்தது."
+            };
+            return responses[currentLanguage] || responses['en'];
+        }
+        
+        function getFoodResponse() {
+            const responses = {
+                'en': "🍽️ Sri Lankan cuisine is a delightful blend of flavors! Must-try dishes include rice and curry (the national dish), hoppers (crispy bowl-shaped pancakes), and kottu roti (shredded flatbread with vegetables). For authentic experience, try eating with your hands and ask for your preferred spice level. 💡 Local secret: Try street food near temples for the best local flavors!",
+                'si': "🍽️ ශ්‍රී ලාංකීය ආහාර රසවත් සුවඳවල මිශ්‍රණයකි! උත්සාහ කළ යුතු ආහාර බත් සහ කරවල (ජාතික ආහාර), ආප්ප (පිළිස්සූ භාජනාකාර ආප්ප), සහ කොට්ටු රොටි (එළවළු සමඟ කැඩූ රොටි) වේ.",
+                'ta': "🍽️ இலங்கை உணவு சுவையான சுவைகளின் கலவையாகும்! முயற்சிக்க வேண்டிய உணவுகள் சோறு மற்றும் குழம்பு (தேசிய உணவு), அப்பம் (மிருதுவான பாத்திர வடிவ அப்பம்), மற்றும் கொட்டு ரொட்டி (காய்கறிகளுடன் கூடிய கிழிந்த ரொட்டி) ஆகும்."
+            };
+            return responses[currentLanguage] || responses['en'];
+        }
+        
+        function getTransportResponse() {
+            const responses = {
+                'en': "🚌 Sri Lanka offers various transport options! Public buses are very cheap (Rs. 20-200) and cover most of the country. Trains provide scenic journeys, especially the Kandy to Ella route. Tuk-tuks are great for short distances - always negotiate the price first! 💡 Insider tip: Book 2nd or 3rd class train tickets for the best views and most authentic experience!",
+                'si': "🚌 ශ්‍රී ලංකාව විවිධ ප්‍රවාහන විකල්ප ලබා දෙයි! පොදු බස් ඉතා ලාභදායී (රු. 20-200) වන අතර රටේ බොහෝ ප්‍රදේශ ආවරණය කරයි.",
+                'ta': "🚌 இலங்கை பல்வேறு போக்குவரத்து விருப்பங்களை வழங்குகிறது! பொது பஸ்கள் மிகவும் மலிவானவை (ரூ. 20-200) மற்றும் நாட்டின் பெரும்பாலான பகுதிகளை உள்ளடக்கியவை."
+            };
+            return responses[currentLanguage] || responses['en'];
+        }
+        
+        function getAccommodationResponse() {
+            const responses = {
+                'en': "🏨 Sri Lanka has accommodation for every budget! Hotels range from budget ($20-50) to luxury ($150+). Guesthouses offer family-run experiences ($15-40/night), while homestays provide authentic cultural immersion ($10-30/night including meals). 💡 My recommendation: Book guesthouses in Kandy, Galle, and Sigiriya for the best local experience!",
+                'si': "🏨 ශ්‍රී ලංකාවට සෑම අයවැයකටම නවාතැන් ඇත! හෝටල් අයවැය ($20-50) සිට විලාසිතා ($150+) දක්වා පරාසයකි.",
+                'ta': "🏨 இலங்கைக்கு ஒவ்வொரு பட்ஜெட்டிற்கும் வசிப்பிடம் உள்ளது! ஹோட்டல்கள் பட்ஜெட் ($20-50) முதல் லக்சரி ($150+) வரை இருக்கும்."
+            };
+            return responses[currentLanguage] || responses['en'];
+        }
+        
+        function getCultureResponse() {
+            const responses = {
+                'en': "🎭 Sri Lankan culture is rich and diverse! The traditional greeting 'Ayubowan' means 'May you live long' - place your palms together and bow slightly. When visiting temples, dress modestly and remove your shoes. Major festivals include Sinhala New Year (April) and Esala Perahera (July/August). 💡 Cultural tip: Always greet elders first and respect local customs!",
+                'si': "🎭 ශ්‍රී ලාංකීය සංස්කෘතිය සංපූර්ණ සහ විවිධාකාර වේ! සම්ප්‍රදායික ආයුබෝවන් යනු 'ඔබ දිගු කාලයක් ජීවත් වේවා' යන්නයි.",
+                'ta': "🎭 இலங்கை கலாச்சாரம் செழுமையானது மற்றும் பல்வேறு வகையானது! பாரம்பரிய வணக்கம் 'வணக்கம்' என்பது 'நீங்கள் நீண்ட காலம் வாழ்க' என்பதாகும்."
+            };
+            return responses[currentLanguage] || responses['en'];
+        }
+        
+        function getGoodbyeResponse() {
+            const responses = {
+                'en': `Thank you for exploring Sri Lanka with me! I hope I've helped you discover the magic of this beautiful island. Remember, ${currentGuide} is always here when you need travel advice. Have a wonderful journey, and come back soon! Ayubowan! 🙏`,
+                'si': `මා සමඟ ශ්‍රී ලංකාව ගවේෂණය කළ ඔබට ස්තූතියි! ඔබට අපූරු ගමනක් ලැබේවා, ඉක්මනින් නැවත එන්න. ආයුබෝවන්!`,
+                'ta': `என்னுடன் இலங்கையை ஆராய்ந்ததற்கு நன்றி! உங்களுக்கு அருமையான பயணம் கிடைக்கட்டும், விரைவில் திரும்பி வாருங்கள். வணக்கம்!`
+            };
+            return responses[currentLanguage] || responses['en'];
+        }
+        
+        function getFallbackResponse() {
+            const responses = {
+                'en': "I'm not sure I understood that. Could you please ask about attractions, food, culture, transport, or accommodation in Sri Lanka? I'm here to help you plan your perfect trip!",
+                'si': "මට එය තේරුම්ගත නොහැකිය. කරුණාකර ශ්‍රී ලංකාවේ සංචාරක ස්ථාන, ආහාර, සංස්කෘතිය, ප්‍රවාහන හෝ නවාතැන් ගැන අසන්න?",
+                'ta': "அதை நான் புரிந்துகொள்ளவில்லை. தயவுசெய்து இலங்கையின் சுற்றுலா இடங்கள், உணவு, கலாச்சாரம், போக்குவரத்து அல்லது வசிப்பிடம் பற்றி கேள்விப்படவும்?"
+            };
+            return responses[currentLanguage] || responses['en'];
+        }
+        
+        function addMessage(text, sender, intent = null, confidence = null) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = sender === 'user' ? '👤' : '🤖';
+            
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.innerHTML = text;
+            
+            // Add intent and confidence info for bot messages
+            if (sender === 'bot' && intent && intent !== 'unknown') {
+                const intentBadge = document.createElement('div');
+                intentBadge.className = 'intent-badge';
+                intentBadge.textContent = `Intent: ${intent}`;
+                content.appendChild(intentBadge);
+                
+                if (confidence) {
+                    const confidenceBar = document.createElement('div');
+                    confidenceBar.className = 'confidence-bar';
+                    const confidenceFill = document.createElement('div');
+                    confidenceFill.className = 'confidence-fill';
+                    confidenceFill.style.width = (confidence * 100) + '%';
+                    confidenceBar.appendChild(confidenceFill);
+                    content.appendChild(confidenceBar);
+                }
+            }
+            
+            // Add timestamp
+            const timestamp = document.createElement('div');
+            timestamp.className = 'message-time';
+            timestamp.textContent = new Date().toLocaleTimeString();
+            content.appendChild(timestamp);
+            
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(content);
+            messagesContainer.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Update message count
+            if (sender === 'user') {
+                messageCount++;
+                updateStats();
+            }
+        }
+        
+        function showTypingIndicator() {
+            document.getElementById('typing-indicator').style.display = 'block';
+            document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+        }
+        
+        function hideTypingIndicator() {
+            document.getElementById('typing-indicator').style.display = 'none';
+        }
+        
+        function updateStats() {
+            document.getElementById('message-count').textContent = messageCount;
+            document.getElementById('languages-used').textContent = currentLanguage.toUpperCase();
+            document.getElementById('current-guide').textContent = currentGuide;
+        }
+        
+        function clearChat() {
+            const messagesContainer = document.getElementById('chat-messages');
+            messagesContainer.innerHTML = `
+                <div class="welcome-message">
+                    <h3>Welcome to Sri Lanka! 🇱🇰</h3>
+                    <p>I'm your virtual tour guide, ready to help you explore this beautiful island!</p>
+                    <p>Ask me about:</p>
+                    <ul style="text-align: left; display: inline-block;">
+                        <li>🏰 Tourist attractions and landmarks</li>
+                        <li>🍽️ Local cuisine and food recommendations</li>
+                        <li>🚌 Transportation options</li>
+                        <li>🏨 Accommodation suggestions</li>
+                        <li>🎭 Cultural customs and etiquette</li>
+                    </ul>
+                    <p>I can communicate in English, Sinhala (සිංහල), and Tamil (தமிழ்).</p>
+                    <p>Start by saying hello or asking a question!</p>
+                </div>
+            `;
+            messageCount = 0;
+            updateStats();
+        }
+        
+        function setExampleQuery(query) {
+            document.getElementById('message-input').value = query;
+            document.getElementById('message-input').focus();
+        }
+    </script>
+</body>
+</html>
