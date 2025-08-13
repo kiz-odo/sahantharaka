@@ -337,6 +337,117 @@ class TourismKnowledgeBase:
                         'tips': ['උච්චතම සෘතුවේ කලින් වෙන් කර ගන්න', 'පැකේජ ගනුදෙනු සඳහා පරීක්ෂා කරන්න', 'සමාලෝචන කාරfullyජ්‍යව කියවන්න']
                     }
                 }
+            },
+            'historical_sites': {
+                'en': {
+                    'sigiriya': {
+                        'name': 'Sigiriya (Lion Rock)',
+                        'description': 'A remarkable 5th-century rock fortress and palace, renowned for its massive lion\'s paw entrance, exquisite frescoes, and the ruins at the summit offering breathtaking panoramic views.',
+                        'highlights': ['Ancient palace complex', 'Lion\'s paw entrance', 'Frescoes', 'Panoramic views', 'UNESCO World Heritage Site'],
+                        'tips': ['Visit early morning to avoid crowds', 'Wear comfortable shoes for climbing', 'Bring water and sunscreen', 'Allow 3-4 hours for complete exploration'],
+                        'best_time': 'Early morning (6:00 AM - 10:00 AM)',
+                        'entrance_fee': 'USD 30',
+                        'location': 'Central Province, near Dambulla'
+                    },
+                    'anuradhapura': {
+                        'name': 'Ancient City of Anuradhapura',
+                        'description': 'The island\'s first capital, featuring a vast complex of sacred Buddhist sites, including monasteries and towering stupas such as the Ruwanwelisaya and Jetavanaramaya.',
+                        'highlights': ['Sacred Bodhi Tree', 'Ruwanwelisaya Stupa', 'Jetavanaramaya Stupa', 'Ancient monasteries', 'Sacred ponds'],
+                        'tips': ['Dress modestly as it\'s a sacred site', 'Visit the Bodhi Tree first', 'Hire a guide for historical context', 'Allow full day for exploration'],
+                        'best_time': 'Morning and evening',
+                        'entrance_fee': 'USD 25',
+                        'location': 'North Central Province'
+                    },
+                    'polonnaruwa': {
+                        'name': 'Ancient City of Polonnaruwa',
+                        'description': 'The second capital, celebrated for its well-preserved medieval ruins, like the Royal Palace, the Quadrangle, and the stunning rock-carved Buddha statues at Gal Vihara.',
+                        'highlights': ['Royal Palace ruins', 'The Quadrangle', 'Gal Vihara rock carvings', 'Lankatilaka Temple', 'Vatadage'],
+                        'tips': ['Best visited after Anuradhapura', 'Rent bicycles for easy exploration', 'Visit Gal Vihara in golden hour', 'Allow 4-5 hours'],
+                        'best_time': 'Morning to early afternoon',
+                        'entrance_fee': 'USD 25',
+                        'location': 'North Central Province'
+                    },
+                    'dambulla_cave_temple': {
+                        'name': 'Dambulla Cave Temple (Golden Temple)',
+                        'description': 'The largest and best-preserved cave temple complex in the country, with over 150 statues and vibrant murals across five caves.',
+                        'highlights': ['Five cave temples', '150+ Buddha statues', 'Ancient murals', 'Golden Buddha statue', 'Panoramic views'],
+                        'tips': ['Remove shoes before entering', 'Dress modestly', 'Visit early to avoid heat', 'Photography allowed outside caves'],
+                        'best_time': 'Morning or late afternoon',
+                        'entrance_fee': 'USD 15',
+                        'location': 'Central Province, near Sigiriya'
+                    },
+                    'kandy_sacred_city': {
+                        'name': 'Sacred City of Kandy',
+                        'description': 'The last capital of the Sri Lankan kings, a cultural hub centered around the revered Temple of the Tooth Relic, which houses a sacred tooth of the Buddha.',
+                        'highlights': ['Temple of the Tooth Relic', 'Kandy Lake', 'Royal Palace', 'Cultural shows', 'Botanical Gardens'],
+                        'tips': ['Visit during evening puja ceremony', 'Dress modestly for temple', 'Attend cultural dance show', 'Walk around Kandy Lake'],
+                        'best_time': 'Evening for temple ceremonies',
+                        'entrance_fee': 'USD 20',
+                        'location': 'Central Province'
+                    },
+                    'galle_fort': {
+                        'name': 'Galle Fort',
+                        'description': 'A historic colonial-era fortress originally built by the Portuguese and later strengthened by the Dutch, now featuring cobblestone streets lined with boutique shops, cafes, and colonial architecture.',
+                        'highlights': ['Dutch colonial architecture', 'Lighthouse', 'Maritime Museum', 'Boutique shops', 'Cafes and restaurants'],
+                        'tips': ['Walk the ramparts at sunset', 'Explore on foot', 'Visit the Maritime Museum', 'Try local cafes'],
+                        'best_time': 'Late afternoon to evening',
+                        'entrance_fee': 'Free',
+                        'location': 'Southern Province, Galle'
+                    },
+                    'sinharaja_forest': {
+                        'name': 'Sinharaja Forest Reserve',
+                        'description': 'A national park and biodiversity hotspot, valued for its pristine tropical rainforest teeming with endemic species.',
+                        'highlights': ['Endemic bird species', 'Rare plants', 'Waterfalls', 'Hiking trails', 'Biodiversity'],
+                        'tips': ['Hire a local guide', 'Wear leech socks', 'Bring rain gear', 'Best for bird watching'],
+                        'best_time': 'Early morning for bird watching',
+                        'entrance_fee': 'USD 15',
+                        'location': 'Sabaragamuwa Province'
+                    }
+                },
+                'si': {
+                    'sigiriya': {
+                        'name': 'සීගිරිය (සිංහ ගිර)',
+                        'description': 'ක්රි.ව. 5 වන සියවසේ ගොඩනැගිලි සහිත පුරාණ ගල් බලකොටුවක්. මහා සිංහ පාද ඇතුළුවරය, අලංකාර චිත්ර, සහ උඩුගල මත පිහිටි නටඹුන් ඇතුළුව අවිශ්වාසී දර්ශන.',
+                        'highlights': ['පුරාණ මාලිගා සංකීර්ණය', 'සිංහ පාද ඇතුළුවරය', 'චිත්ර', 'දර්ශන', 'යුනෙස්කෝ ලෝක උරුම අඩවිය'],
+                        'tips': ['කොල්ලෝ වළක්වා ගැනීමට අලුදා යන්න', 'ඇවිදීමට සුදුසු සපත්තු පැළඳගන්න', 'ජලය සහ සූර්ය ආරක්ෂක ගෙන යන්න', 'සම්පූර්ණ ගවේෂණය සඳහා පැය 3-4 ලබා දෙන්න'],
+                        'best_time': 'අලුදා (පෙ.ව. 6:00 - පෙ.ව. 10:00)',
+                        'entrance_fee': 'ඩොලර් 30',
+                        'location': 'මධ්‍යම පළාත, දඹුල්ල අසල'
+                    }
+                },
+                'ta': {
+                    'sigiriya': {
+                        'name': 'சிகிரியா (சிங்க கல்)',
+                        'description': 'கி.பி. 5 ஆம் நூற்றாண்டின் கோட்டை மற்றும் அரண்மனை, பெரிய சிங்க பாத நுழைவு வாயில், அழகிய ஓவியங்கள் மற்றும் மேலே உள்ள இடிபாடுகள் அற்புதமான காட்சிகளை வழங்குகின்றன.',
+                        'highlights': ['பண்டைய அரண்மனை வளாகம்', 'சிங்க பாத நுழைவு வாயில்', 'ஓவியங்கள்', 'காட்சிகள்', 'யுனெஸ்கோ உலக பாரம்பரிய தளம்'],
+                        'tips': ['கூட்டத்தைத் தவிர்க்க காலையில் செல்லுங்கள்', 'ஏறுவதற்கு வசதியான காலணிகளை அணியுங்கள்', 'தண்ணீர் மற்றும் சூரிய ஒளி தடுப்பு குழைமத்தைக் கொண்டு வாருங்கள்', 'முழு ஆராய்ச்சிக்கு 3-4 மணி நேரம் ஒதுக்குங்கள்'],
+                        'best_time': 'காலை (காலை 6:00 - காலை 10:00)',
+                        'entrance_fee': 'டாலர் 30',
+                        'location': 'மத்திய மாகாணம், தம்புள்ள அருகே'
+                    }
+                },
+                'zh': {
+                    'sigiriya': {
+                        'name': '锡吉里耶（狮子岩）',
+                        'description': '一座令人瞩目的5世纪岩石堡垒和宫殿，以其巨大的狮子爪入口、精美的壁画和山顶废墟提供的令人叹为观止的全景而闻名。',
+                        'highlights': ['古代宫殿建筑群', '狮子爪入口', '壁画', '全景视野', '联合国教科文组织世界遗产'],
+                        'tips': ['清晨参观以避免人群', '穿舒适的鞋子攀爬', '带水和防晒霜', '留出3-4小时完整探索'],
+                        'best_time': '清晨（上午6:00-10:00）',
+                        'entrance_fee': '30美元',
+                        'location': '中部省，丹布勒附近'
+                    }
+                },
+                'fr': {
+                    'sigiriya': {
+                        'name': 'Sigiriya (Rocher du Lion)',
+                        'description': 'Une forteresse et un palais rocheux remarquables du 5ème siècle, renommés pour son entrée massive en patte de lion, ses fresques exquises et les ruines au sommet offrant des vues panoramiques à couper le souffle.',
+                        'highlights': ['Complexe de palais ancien', 'Entrée en patte de lion', 'Fresques', 'Vues panoramiques', 'Site du patrimoine mondial UNESCO'],
+                        'tips': ['Visitez tôt le matin pour éviter la foule', 'Portez des chaussures confortables pour grimper', 'Apportez de l\'eau et de la crème solaire', 'Prévoyez 3-4 heures pour une exploration complète'],
+                        'best_time': 'Tôt le matin (6h00 - 10h00)',
+                        'entrance_fee': '30 USD',
+                        'location': 'Province centrale, près de Dambulla'
+                    }
+                }
             }
         }
     
