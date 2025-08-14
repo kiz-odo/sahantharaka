@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .game-title {
+            font-size: 2.5rem;
+            color: #1e3c72;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .score-board {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #e9ecef;
+        }
+
+        .team {
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1e3c72;
+            margin-bottom: 10px;
+        }
+
+        .team-score {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #28a745;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-field {
+            background: linear-gradient(45deg, #228B22, #32CD32);
+            border: 3px solid #fff;
+            border-radius: 15px;
+            height: 300px;
+            position: relative;
+            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .field-lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .center-line {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 3px;
+            height: 100%;
+            background: #fff;
+            transform: translateX(-50%);
+        }
+
+        .center-circle {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 60px;
+            height: 60px;
+            border: 3px solid #fff;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .goal-area {
+            position: absolute;
+            top: 50%;
+            width: 80px;
+            height: 120px;
+            border: 3px solid #fff;
+            transform: translateY(-50%);
+        }
+
+        .goal-area.left {
+            left: 0;
+            border-right: none;
+        }
+
+        .goal-area.right {
+            right: 0;
+            border-left: none;
+        }
+
+        .ball {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .control-btn {
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        .btn-kick {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+        }
+
+        .btn-pass {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+        }
+
+        .btn-reset {
+            background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+            color: white;
+        }
+
+        .game-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .game-status {
+            font-size: 1.2rem;
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .instructions {
+            color: #6c757d;
+            line-height: 1.6;
+        }
+
+        .timer {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #dc3545;
+            margin-bottom: 15px;
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .game-title {
+                font-size: 2rem;
+            }
+            
+            .score-board {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .control-btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">⚽ Football Game</h1>
+            <p class="game-subtitle">Score goals and become the champion!</p>
+        </div>
+
+        <div class="score-board">
+            <div class="team">
+                <div class="team-name">Home Team</div>
+                <div class="team-score" id="homeScore">0</div>
+            </div>
+            <div class="team">
+                <div class="team-name">Away Team</div>
+                <div class="team-score" id="awayScore">0</div>
+            </div>
+        </div>
+
+        <div class="game-field">
+            <div class="field-lines">
+                <div class="center-line"></div>
+                <div class="center-circle"></div>
+                <div class="goal-area left"></div>
+                <div class="goal-area right"></div>
+            </div>
+            <div class="ball" id="ball"></div>
+        </div>
+
+        <div class="controls">
+            <button class="control-btn btn-kick" onclick="kickBall()">Kick Ball</button>
+            <button class="control-btn btn-pass" onclick="passBall()">Pass Ball</button>
+            <button class="control-btn btn-reset" onclick="resetGame()">Reset Game</button>
+        </div>
+
+        <div class="game-info">
+            <div class="timer" id="timer">Time: 0:00</div>
+            <div class="game-status" id="gameStatus">Click 'Kick Ball' to start playing!</div>
+            <div class="instructions">
+                <strong>How to play:</strong><br>
+                • Click 'Kick Ball' to shoot towards the goal<br>
+                • Use 'Pass Ball' to move the ball around<br>
+                • Score goals to win!<br>
+                • The ball will move randomly after each action
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let homeScore = 0;
+        let awayScore = 0;
+        let gameTime = 0;
+        let gameTimer;
+        let ballPosition = { x: 50, y: 50 };
+        let isGameActive = false;
+
+        const ball = document.getElementById('ball');
+        const homeScoreElement = document.getElementById('homeScore');
+        const awayScoreElement = document.getElementById('awayScore');
+        const gameStatusElement = document.getElementById('gameStatus');
+        const timerElement = document.getElementById('timer');
+
+        function updateScore() {
+            homeScoreElement.textContent = homeScore;
+            awayScoreElement.textContent = awayScore;
+        }
+
+        function updateBallPosition() {
+            ball.style.left = ballPosition.x + '%';
+            ball.style.top = ballPosition.y + '%';
+        }
+
+        function moveBallRandomly() {
+            const fieldWidth = 80; // Account for goal areas
+            const fieldHeight = 80;
+            
+            ballPosition.x = Math.max(10, Math.min(90, ballPosition.x + (Math.random() - 0.5) * 20));
+            ballPosition.y = Math.max(10, Math.min(90, ballPosition.y + (Math.random() - 0.5) * 20));
+            
+            updateBallPosition();
+        }
+
+        function checkGoal() {
+            // Check if ball is in left goal (away team scores)
+            if (ballPosition.x <= 5 && ballPosition.y >= 35 && ballPosition.y <= 65) {
+                awayScore++;
+                gameStatusElement.textContent = "🎉 Away Team scores! GOAL!";
+                updateScore();
+                setTimeout(() => {
+                    resetBallPosition();
+                }, 2000);
+                return true;
+            }
+            
+            // Check if ball is in right goal (home team scores)
+            if (ballPosition.x >= 95 && ballPosition.y >= 35 && ballPosition.y <= 65) {
+                homeScore++;
+                gameStatusElement.textContent = "🎉 Home Team scores! GOAL!";
+                updateScore();
+                setTimeout(() => {
+                    resetBallPosition();
+                }, 2000);
+                return true;
+            }
+            
+            return false;
+        }
+
+        function resetBallPosition() {
+            ballPosition.x = 50;
+            ballPosition.y = 50;
+            updateBallPosition();
+            gameStatusElement.textContent = "Ball reset to center. Keep playing!";
+        }
+
+        function kickBall() {
+            if (!isGameActive) {
+                startGame();
+            }
+            
+            gameStatusElement.textContent = "⚽ Ball kicked!";
+            
+            // Move ball towards a random direction
+            const angle = Math.random() * 2 * Math.PI;
+            const distance = 30 + Math.random() * 20;
+            
+            ballPosition.x += Math.cos(angle) * distance;
+            ballPosition.y += Math.sin(angle) * distance;
+            
+            // Keep ball within bounds
+            ballPosition.x = Math.max(5, Math.min(95, ballPosition.x));
+            ballPosition.y = Math.max(5, Math.min(95, ballPosition.y));
+            
+            updateBallPosition();
+            
+            // Check for goal
+            if (!checkGoal()) {
+                setTimeout(() => {
+                    moveBallRandomly();
+                    gameStatusElement.textContent = "Ball moved. Your turn!";
+                }, 1000);
+            }
+        }
+
+        function passBall() {
+            if (!isGameActive) {
+                startGame();
+            }
+            
+            gameStatusElement.textContent = "🔄 Ball passed!";
+            
+            // Move ball to a random position on the field
+            ballPosition.x = 15 + Math.random() * 70;
+            ballPosition.y = 15 + Math.random() * 70;
+            
+            updateBallPosition();
+            
+            setTimeout(() => {
+                moveBallRandomly();
+                gameStatusElement.textContent = "Ball repositioned. Strategic move!";
+            }, 1000);
+        }
+
+        function startGame() {
+            if (!isGameActive) {
+                isGameActive = true;
+                gameTimer = setInterval(() => {
+                    gameTime++;
+                    const minutes = Math.floor(gameTime / 60);
+                    const seconds = gameTime % 60;
+                    timerElement.textContent = `Time: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+                gameStatusElement.textContent = "Game started! Click 'Kick Ball' to play!";
+            }
+        }
+
+        function resetGame() {
+            homeScore = 0;
+            awayScore = 0;
+            gameTime = 0;
+            isGameActive = false;
+            
+            if (gameTimer) {
+                clearInterval(gameTimer);
+            }
+            
+            resetBallPosition();
+            updateScore();
+            timerElement.textContent = "Time: 0:00";
+            gameStatusElement.textContent = "Game reset! Click 'Kick Ball' to start playing!";
+        }
+
+        // Initialize game
+        updateBallPosition();
+        
+        // Add some interactive ball movement on hover
+        ball.addEventListener('mouseenter', () => {
+            ball.style.transform = 'translate(-50%, -50%) scale(1.2)';
+        });
+        
+        ball.addEventListener('mouseleave', () => {
+            ball.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+    </script>
+</body>
+</html>
