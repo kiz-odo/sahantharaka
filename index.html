@@ -3,78 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShopEase - Your Online Store</title>
+    <title>ShopHub - Your Online Store</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body>
     <!-- Header -->
     <header class="header">
         <div class="container">
             <div class="logo">
-                <h1><i class="fas fa-shopping-bag"></i> ShopEase</h1>
+                <h1>ShopHub</h1>
             </div>
             <nav class="nav">
-                <ul class="nav-list">
-                    <li><a href="#home" class="nav-link active">Home</a></li>
-                    <li><a href="#products" class="nav-link">Products</a></li>
-                    <li><a href="#categories" class="nav-link">Categories</a></li>
-                    <li><a href="#about" class="nav-link">About</a></li>
-                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
             <div class="header-actions">
-                <div class="search-box">
-                    <input type="text" placeholder="Search products..." id="searchInput">
-                    <button type="button" id="searchBtn"><i class="fas fa-search"></i></button>
-                </div>
-                <div class="cart-icon" id="cartIcon">
+                <button class="cart-btn" id="cartBtn">
                     <i class="fas fa-shopping-cart"></i>
                     <span class="cart-count" id="cartCount">0</span>
-                </div>
-                <div class="user-menu">
-                    <button class="user-btn" id="userBtn">
-                        <i class="fas fa-user"></i>
-                    </button>
-                </div>
+                </button>
+                <button class="search-btn" id="searchBtn">
+                    <i class="fas fa-search"></i>
+                </button>
             </div>
         </div>
     </header>
 
+    <!-- Search Modal -->
+    <div class="search-modal" id="searchModal">
+        <div class="search-content">
+            <input type="text" id="searchInput" placeholder="Search products...">
+            <button class="close-search" id="closeSearch">&times;</button>
+        </div>
+    </div>
+
     <!-- Main Content -->
     <main class="main">
         <!-- Hero Section -->
-        <section class="hero" id="home">
+        <section class="hero">
             <div class="container">
                 <div class="hero-content">
-                    <h2>Welcome to ShopEase</h2>
+                    <h2>Welcome to ShopHub</h2>
                     <p>Discover amazing products at unbeatable prices</p>
                     <button class="cta-btn" onclick="scrollToProducts()">Shop Now</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Categories Section -->
-        <section class="categories" id="categories">
-            <div class="container">
-                <h2 class="section-title">Shop by Category</h2>
-                <div class="category-grid">
-                    <div class="category-card" data-category="electronics">
-                        <i class="fas fa-laptop"></i>
-                        <h3>Electronics</h3>
-                    </div>
-                    <div class="category-card" data-category="clothing">
-                        <i class="fas fa-tshirt"></i>
-                        <h3>Clothing</h3>
-                    </div>
-                    <div class="category-card" data-category="home">
-                        <i class="fas fa-home"></i>
-                        <h3>Home & Garden</h3>
-                    </div>
-                    <div class="category-card" data-category="sports">
-                        <i class="fas fa-futbol"></i>
-                        <h3>Sports</h3>
-                    </div>
                 </div>
             </div>
         </section>
@@ -82,117 +58,60 @@
         <!-- Products Section -->
         <section class="products" id="products">
             <div class="container">
-                <div class="products-header">
-                    <h2 class="section-title">Featured Products</h2>
-                    <div class="filters">
-                        <select id="sortSelect" class="filter-select">
-                            <option value="default">Sort by</option>
-                            <option value="price-low">Price: Low to High</option>
-                            <option value="price-high">Price: High to Low</option>
-                            <option value="name">Name: A to Z</option>
-                            <option value="rating">Highest Rated</option>
-                        </select>
-                        <div class="price-filter">
-                            <label>Price Range:</label>
-                            <input type="range" id="priceRange" min="0" max="1000" value="1000">
-                            <span id="priceValue">$1000</span>
-                        </div>
-                    </div>
+                <h2 class="section-title">Our Products</h2>
+                <div class="filters">
+                    <select id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="electronics">Electronics</option>
+                        <option value="clothing">Clothing</option>
+                        <option value="books">Books</option>
+                        <option value="home">Home & Garden</option>
+                    </select>
+                    <select id="sortFilter">
+                        <option value="name">Sort by Name</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Sort by Rating</option>
+                    </select>
                 </div>
                 <div class="products-grid" id="productsGrid">
-                    <!-- Products will be dynamically loaded here -->
-                </div>
-                <div class="load-more">
-                    <button class="load-more-btn" id="loadMoreBtn">Load More Products</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- About Section -->
-        <section class="about" id="about">
-            <div class="container">
-                <h2 class="section-title">About ShopEase</h2>
-                <div class="about-content">
-                    <div class="about-text">
-                        <p>ShopEase is your trusted online destination for quality products. We offer a wide selection of items across various categories, ensuring you find exactly what you need.</p>
-                        <p>Our commitment to customer satisfaction, competitive pricing, and fast delivery makes us the preferred choice for online shopping.</p>
-                    </div>
-                    <div class="features">
-                        <div class="feature">
-                            <i class="fas fa-shipping-fast"></i>
-                            <h3>Fast Delivery</h3>
-                            <p>Free shipping on orders over $50</p>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-shield-alt"></i>
-                            <h3>Secure Payment</h3>
-                            <p>100% secure payment processing</p>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-undo"></i>
-                            <h3>Easy Returns</h3>
-                            <p>30-day return policy</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section class="contact" id="contact">
-            <div class="container">
-                <h2 class="section-title">Contact Us</h2>
-                <div class="contact-content">
-                    <div class="contact-info">
-                        <div class="contact-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <div>
-                                <h3>Address</h3>
-                                <p>123 Shopping Street, E-commerce City, EC 12345</p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-phone"></i>
-                            <div>
-                                <h3>Phone</h3>
-                                <p>+1 (555) 123-4567</p>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <i class="fas fa-envelope"></i>
-                            <div>
-                                <h3>Email</h3>
-                                <p>info@shopease.com</p>
-                            </div>
-                        </div>
-                    </div>
-                    <form class="contact-form" id="contactForm">
-                        <input type="text" placeholder="Your Name" required>
-                        <input type="email" placeholder="Your Email" required>
-                        <textarea placeholder="Your Message" rows="5" required></textarea>
-                        <button type="submit" class="submit-btn">Send Message</button>
-                    </form>
+                    <!-- Products will be loaded here -->
                 </div>
             </div>
         </section>
     </main>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Shopping Cart</h3>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be displayed here -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span class="total-amount" id="totalAmount">$0.00</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn">Checkout</button>
+        </div>
+    </div>
+
+    <!-- Cart Overlay -->
+    <div class="cart-overlay" id="cartOverlay"></div>
 
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>ShopEase</h3>
+                    <h4>ShopHub</h4>
                     <p>Your trusted online shopping destination</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin"></i></a>
-                    </div>
                 </div>
                 <div class="footer-section">
-                    <h3>Quick Links</h3>
+                    <h4>Quick Links</h4>
                     <ul>
                         <li><a href="#home">Home</a></li>
                         <li><a href="#products">Products</a></li>
@@ -201,87 +120,32 @@
                     </ul>
                 </div>
                 <div class="footer-section">
-                    <h3>Customer Service</h3>
-                    <ul>
-                        <li><a href="#">Help Center</a></li>
-                        <li><a href="#">Returns</a></li>
-                        <li><a href="#">Shipping Info</a></li>
-                        <li><a href="#">Size Guide</a></li>
-                    </ul>
+                    <h4>Contact Info</h4>
+                    <p>Email: info@shophub.com</p>
+                    <p>Phone: (555) 123-4567</p>
                 </div>
                 <div class="footer-section">
-                    <h3>Newsletter</h3>
-                    <p>Subscribe for updates and exclusive offers</p>
-                    <form class="newsletter-form" id="newsletterForm">
-                        <input type="email" placeholder="Enter your email" required>
-                        <button type="submit">Subscribe</button>
-                    </form>
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 ShopEase. All rights reserved.</p>
+                <p>&copy; 2024 ShopHub. All rights reserved.</p>
             </div>
         </div>
     </footer>
 
-    <!-- Shopping Cart Modal -->
-    <div class="cart-modal" id="cartModal">
-        <div class="cart-content">
-            <div class="cart-header">
-                <h3>Shopping Cart</h3>
-                <button class="close-btn" id="closeCart">&times;</button>
-            </div>
-            <div class="cart-items" id="cartItems">
-                <!-- Cart items will be displayed here -->
-            </div>
-            <div class="cart-footer">
-                <div class="cart-total">
-                    <span>Total:</span>
-                    <span id="cartTotal">$0.00</span>
-                </div>
-                <div class="cart-actions">
-                    <button class="clear-cart-btn" id="clearCart">Clear Cart</button>
-                    <button class="checkout-btn" id="checkoutBtn">Checkout</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Product Quick View Modal -->
-    <div class="quick-view-modal" id="quickViewModal">
-        <div class="quick-view-content">
-            <button class="close-btn" id="closeQuickView">&times;</button>
-            <div class="quick-view-body" id="quickViewBody">
+    <!-- Product Modal -->
+    <div class="product-modal" id="productModal">
+        <div class="product-modal-content">
+            <span class="close-modal" id="closeModal">&times;</span>
+            <div class="product-modal-body" id="productModalBody">
                 <!-- Product details will be displayed here -->
             </div>
-        </div>
-    </div>
-
-    <!-- User Menu Modal -->
-    <div class="user-modal" id="userModal">
-        <div class="user-content">
-            <div class="user-header">
-                <h3>Account</h3>
-                <button class="close-btn" id="closeUser">&times;</button>
-            </div>
-            <div class="user-body">
-                <div class="user-actions">
-                    <button class="login-btn" id="loginBtn">Login</button>
-                    <button class="register-btn" id="registerBtn">Register</button>
-                </div>
-                <div class="user-info" id="userInfo" style="display: none;">
-                    <p>Welcome, <span id="userName">User</span>!</p>
-                    <button class="logout-btn" id="logoutBtn">Logout</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Notification Toast -->
-    <div class="toast" id="toast">
-        <div class="toast-content">
-            <span id="toastMessage"></span>
-            <button class="toast-close">&times;</button>
         </div>
     </div>
 
